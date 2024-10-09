@@ -1,5 +1,4 @@
 # Team Charter
-##
 ## Individual Commitment
 Elgendy: Currently holds SL position and has time to commit to the capstone however has to fulfill Cyber Operation requirements.
 Zayfman: Currently I have 2 work intensive billets and am working to apply to graduate school. Once the application for graduate school is done I will have more time to commit to the Capstone.
