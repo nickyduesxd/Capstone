@@ -1,7 +1,7 @@
 # Team Charter
 ##
 ## Individual Commitment
-Elgendy:
+Elgendy: Currently holds SL position and has time to commit to the capstone however has to fulfill Cyber Operation requirements.
 Zayfman: Currently I have 2 work intensive billets and am working to apply to graduate school. Once the application for graduate school is done I will have more time to commit to the Capstone.
 ## Missed Deadlines
 If a team member misses a deadline then we will host a meeting to discuss what's going on and come up with a course of action. If needed to escalate then we will have a mediator present.
