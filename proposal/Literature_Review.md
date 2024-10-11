@@ -1,0 +1,5 @@
+
+## Hybrid Low-Power Wide-Area Mesh Network for IoT Applications
+https://ieeexplore.ieee.org/abstract/document/9139964
+Summary: This paper proposes a hybrid, low-power, wide-area network (LPWAN) architecture for Internet of Things (IoT) applications that combines the advantages of sub-GHz long-range radio (LoRa) and 2.4-GHz short-range radio (ANT) protocols. The paper describes the real-world deployments of this hybrid network at the Purdue University campus (1.2 sq km) and a university-owned farm (2.2 sq km). The results demonstrate the advantages of the proposed network in terms of cost, coverage, and power consumption compared to other IoT solutions like LoRaWAN. The multi-hop LoRa mesh network was able to cover long distances (up to 3 km) with over 98% packet delivery ratio (PDR) using a lower spreading factor (SF7), in contrast to LoRaWAN which requires higher SFs for long ranges leading to higher power consumption. 
+Analysis:
