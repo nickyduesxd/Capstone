@@ -15,8 +15,7 @@ The Marine Corps Marathon is a large event and high visibility with 30,000 parti
 ### Market Research
 -
 ### Literature Review: 
-Can be found here.
-[a relative link](Literature_Review.md)
+Can be found [here.](Literature_Review.md)
 
 ## Proposed Design and Architecture
 ### User Types/Personas:
