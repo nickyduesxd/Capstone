@@ -1,4 +1,4 @@
-# Marine Corps Marathon Medical Communications System
+# Marine Corps Marathon Medical Communications System and User Interface
 
 ## Overview
 ### What are you planning to build?
@@ -22,10 +22,10 @@ Can be found [here.](Literature_Review.md)
 - Main Customer's name is Mark and he is in charge of the HAM radio volunteer group for the USMC Marathon.
 - Users are USMC Marathon volunteers. 
 ### System Design: Software Designed Mesh Network
+- We intend to solve the problem by creating a mesh network, testing this network in an urban environment, and produce a user interface to go alongside it.
+### System Architecture:
 - We intend to construct a meshed network using nodes bought from Eltec Automation [product_page](https://heltec.org/project/wifi-lora-32-v3/) with transceivers from semtech [product_page](https://www.semtech.com/products/wireless-rf/lora-transceivers/sx1276) and use the physical and transport systems from radio head [library_page](https://www.airspayce.com/mikem/arduino/RadioHead/).
 - We also inted to design a user interface using html, php, json, and java script that allows users to input information into the nodes and autopopulate and sort allowing for the lead volunteer to track medical casualties during live time.
-### System Architecture:
-
 ## Project Management
 
 ### Premilinary Release Plan
@@ -37,3 +37,13 @@ Can be found [here.](Literature_Review.md)
 - Professor Dias (Faculty Advisor - Cyber Operation)
 
 # Admin/Fine Print
+
+## GFI/GFE
+## Customer Meeting Plan
+## Acceptance Window
+Scheduled completion by the end of the academic year.
+## How code will be delivered.
+The code will be delivered via GitLab, with access provided to project advisors.
+## Usage License
+The project follows the standard usage license outlined in Paragraph 10 of the USNA CS Capstone Instruction.
+## Termination Clause
