@@ -4,7 +4,7 @@
 ### What are you planning to build?
 A mesh network system that connects to a user interface composed of an html server, data base, authentication system, volunteer login, and administrator log in.
 ### What problem will it solve?
-Solve efficiency and manpower problems with the current HAM radio system. Currently the Medical Communication team is having a hard time finding volunteers with HAM radio licenses and are currently manually inputting data into their internal database.
+Solve efficiency and manpower problems with the current HAM radio system. Currently the Medical Communication team is having a hard time finding volunteers with HAM radio licenses and are currently manually inputting data into their internal database which increases the time that a medical casaulty is reported to when it is recorded.
 ### Why is it important?
 The Marine Corps Marathon is a large event and high visibility with 30,000 participants and many more spectators as well distiniguished participants and guests.
 ## Market Resarch/Literature Review:
