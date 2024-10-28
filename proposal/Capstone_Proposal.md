@@ -1,5 +1,8 @@
 # Marine Corps Marathon Medical Communications System and User Interface
 
+# Presentation Slidedeck
+https://docs.google.com/presentation/d/1x1Ycq-gV-lEZHK0Q1es8ILs1GWJiPB6k/edit#slide=id.p23
+
 ## Overview
 ### What are you planning to build?
 A mesh network system that connects to a user interface composed of an html server, data base, authentication system, volunteer login, and administrator log in. In addition we plan to develop a barcode system (with generating and reading capability) as well as an automatic email sender in order to provide other tools that the team can implement.
@@ -46,6 +49,16 @@ Project is broken into 4 phases.
 - Phase 4: Network development
     - Setting up the nodes alonsgide transport layer system and phasing in with the UI.
 ### Product Back Log
+- Reconassiance: USMC Marathon MO 27OCT2024
+- Barcode Generator using python (specifically Barcode and ImageWriter libraries)
+- Barcode Scanner App (Use open source - andriod application)
+- Data entry using app interface
+- Data collection using database system
+- Data projection using app interface
+- User authentication system
+- Admin Authentication system
+- Live time tracking system
+- Node development system
 
 ### Faculty SME
 - LCDR Downs (SME)
@@ -62,3 +75,4 @@ The code will be delivered via GitHub, with access provided to project advisors.
 ## Usage License
 The project follows the standard usage license outlined in Paragraph 10 of the USNA CS Capstone Instruction.
 ## Termination Clause
+In the event of project termination, a "recovery plan" will be implemented
