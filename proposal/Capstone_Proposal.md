@@ -13,15 +13,14 @@ For the Computer Science Requirement we will be submitting a User Interface whic
 
 ### What are you planning to build?
 A user interface composed of an html server, data base, authentication system, volunteer login, administrator log in, bar code generation, bar code reading system, an automated email sender, and data compiler.
-HTML Server: We will be hosting the HTML server on a local domain using Node.js specifically http-server.
-Data Base: We intent to use MySQL to store all the data.
-Authentication System: This will be a simple Password Hash system, the user creates a username and password, the username and hash of the password is stored on a server.
-Volunteer and Adminstrator Log In: User will be able to log in and depending on if they are a volunteer or administrator they will have different homepages and access.
-Bar Code Generation: We intend to use the barcode package in python. 
-Bar Code Reading: We intend to create multiple solutions for this feature including using the zxing-cpp package, a purpose-built barcode reader hardware, and the pyzbar package.
-Automated Email Sender: We intend to use the smtplib, email.mime, and csv python packages.
-Data Compiler: The way the USMC Marathon is run, paper copies of Medical Reports are required, so this feature will compile all the casaulty reports into a single PDF file that can be printed and used in this case. We intend to use reportlab.pdfgen package.
-An off the shelf mesh network system that connects to a
+- HTML Server: We will be hosting the HTML server on a local domain using Node.js specifically http-server.
+- Data Base: We intent to use MySQL to store all the data.
+- Authentication System: This will be a simple Password Hash system, the user creates a username and password, the username and hash of the password is stored on a server.
+- Volunteer and Adminstrator Log In: User will be able to log in and depending on if they are a volunteer or administrator they will have different homepages and access.
+- Bar Code Generation: We intend to use the barcode package in python. 
+- Bar Code Reading: We intend to create multiple solutions for this feature including using the zxing-cpp package, a purpose-built barcode reader hardware, and the pyzbar package.
+- Automated Email Sender: We intend to use the smtplib, email.mime, and csv python packages.
+- Data Compiler: The way the USMC Marathon is run, paper copies of Medical Reports are required, so this feature will compile all the casaulty reports into a single PDF file that can be printed and used in this case. We intend to use reportlab.pdfgen package.
 ### What problem will it solve?
 Solve efficiency and manpower problems with the current HAM radio system. Currently the Medical Communication team is having a hard time finding volunteers with HAM radio licenses and are currently manually inputting data into their internal database which increases the time that a medical casaulty is reported to when it is recorded.
 ### Why is it important?
