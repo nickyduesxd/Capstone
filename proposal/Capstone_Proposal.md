@@ -3,19 +3,25 @@
 # Presentation Slidedeck
 https://docs.google.com/presentation/d/1x1Ycq-gV-lEZHK0Q1es8ILs1GWJiPB6k/edit#slide=id.p23
 
+## BLUF
+We are making a UI, that is our first objective. Our second objective is testing out a Software Defined Mesh Network using off the shelf hardware and open source protocols.
+
 ## Overview
-This Capstone fulfills both Cyber Operations and Computer Science Requirements. For Cyber Operations we will be submitting a paper that highlights our communication system proposal based on the Mesh Network for the replacement of HAM Radios. For Computer Science we will be submitting a User Interface which is described below. The reason for the UI is because the HAM Radio system is used as a 3rd Backup in communications during the Marathon however the UI is the main UI used for the Marathon.
+This Capstone fulfills both Cyber Operations and Computer Science Requirements. For the Cyber Operations Requirement we will be submitting a paper that highlights our communication system proposal based on a Software Defined Mesh Network for the replacement of HAM Radio System. This paper will include review of other solutions including drone systems and other Software Defined Networks as well as a security analysis and node optimization on the route.
+
+For the Computer Science Requirement we will be submitting a User Interface which is described in greater detail below. After our trip to the Marine Corps Marathon to see how the communication system works on game day. The HAM Radio system acts as a 3rd back up. The UI currently used is used by all communication systems to track medical casualties in real time and lacks security and efficiency. After talking to our client, he did not have any specifications for what he wants us to design but wants to see what we come up with.
+
 ### What are you planning to build?
-An off the shelf mesh network system that connects to a user interface composed of an html server, data base, authentication system, volunteer login, administrator log in, bar code generation, bar code reading system, an automated email sender, and data compiler.
-Mesh Network System: 
-HTML Server:
-Data Base:
-Authentication System:
-Volunteer and Adminstrator Log In:
-Bar Code Generation: 
-Bar Code Reading:
-Automated Email Sender:
-Data Compiler: The way the USMC Marathon is run, paper copies of Medical Reports are required, so this feature will compile all the casaulty reports into a single PDF file that can be printed and used in this case.
+A user interface composed of an html server, data base, authentication system, volunteer login, administrator log in, bar code generation, bar code reading system, an automated email sender, and data compiler.
+HTML Server: We will be hosting the HTML server on a local domain using Node.js specifically http-server.
+Data Base: We intent to use MySQL to store all the data.
+Authentication System: This will be a simple Password Hash system, the user creates a username and password, the username and hash of the password is stored on a server.
+Volunteer and Adminstrator Log In: User will be able to log in and depending on if they are a volunteer or administrator they will have different homepages and access.
+Bar Code Generation: We intend to use the barcode package in python. 
+Bar Code Reading: We intend to create multiple solutions for this feature including using the zxing-cpp package, a purpose-built barcode reader hardware, and the pyzbar package.
+Automated Email Sender: We intend to use the smtplib, email.mime, and csv python packages.
+Data Compiler: The way the USMC Marathon is run, paper copies of Medical Reports are required, so this feature will compile all the casaulty reports into a single PDF file that can be printed and used in this case. We intend to use reportlab.pdfgen package.
+An off the shelf mesh network system that connects to a
 ### What problem will it solve?
 Solve efficiency and manpower problems with the current HAM radio system. Currently the Medical Communication team is having a hard time finding volunteers with HAM radio licenses and are currently manually inputting data into their internal database which increases the time that a medical casaulty is reported to when it is recorded.
 ### Why is it important?
@@ -26,10 +32,10 @@ The Marine Corps Marathon is a large event and high visibility with ~70,000 part
 - Once the medical casaulty is recieved by the individual at headquarters, it is recorded and inserted by hand into their internal database.
 - This internal database runs at live-time so at the command center located at the G6 shack the head of the medical team can actively track on medical casualties throughout the course with their system.  
 ### Market Research (And why our proposed system is better)
-- Google form: 
-- Chat Box
-- Voice Transmission
-- App
+- Google form: Hard to compile and show data, as well as security flaws.
+- Chat Box: Disorganized.
+- Voice Transmission: Can get chaotic with multiple voice transmissions happening at the same time.
+- App: Limited by system design of phone IOS vs Andriod.
 ### Literature Review: 
 Communication System [here.](Literature_Review.md)
 
@@ -59,15 +65,15 @@ Project is broken into 4 phases.
     - Setting up the nodes alonsgide transport layer system and phasing in with the UI.
 ### Product Back Log
 - Reconassiance: USMC Marathon MO 27OCT2024
-- Barcode Generator using python (specifically Barcode and ImageWriter libraries)
-- Barcode Scanner App (Use open source - andriod application)
-- Data entry using app interface
-- Data collection using database system
-- Data projection using app interface
-- User authentication system
-- Admin Authentication system
-- Live time tracking system
-- Node development system
+- Barcode Generator using python (specifically Barcode and ImageWriter libraries): 08DEC24
+- Barcode Scanner: 08DEC24
+- Data entry using web server interface: 20DEC24
+- Data collection using database system: 20DEC24
+- Data projection using app interface: 12JAN24
+- User authentication system: 25JAN24
+- Admin Authentication system: 25JAN24
+- Live time tracking system: 10FEB24
+- Node development system: 25FEB24
 
 ### Faculty SME
 - LCDR Downs (SME)
@@ -83,6 +89,6 @@ The code will be delivered via GitHub, with access provided to project advisors.
 ## Usage License
 The project follows the standard usage license outlined in Paragraph 10 of the USNA CS Capstone Instruction.
 ## Licenses
-
+MIT License
 ## Termination Clause
 In the event of project termination, a "recovery plan" will be implemented.
