@@ -4,7 +4,7 @@
 https://docs.google.com/presentation/d/1x1Ycq-gV-lEZHK0Q1es8ILs1GWJiPB6k/edit#slide=id.p23
 
 ## BLUF
-We are making a UI, that is our first objective. Our second objective is testing out a Software Defined Mesh Network using off the shelf hardware and open source protocols.
+We are making a UI, that is our first objective (specificaly the barcode system - creating and reading). Our second objective is testing out a Software Defined Mesh Network using off the shelf hardware and open source protocols.
 
 ## Overview
 This Capstone fulfills both Cyber Operations and Computer Science Requirements. For the Cyber Operations Requirement we will be submitting a paper that highlights our communication system proposal based on a Software Defined Mesh Network for the replacement of HAM Radio System. This paper will include review of other solutions including drone systems and other Software Defined Networks as well as a security analysis and node optimization on the route.
