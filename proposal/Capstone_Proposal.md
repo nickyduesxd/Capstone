@@ -79,13 +79,13 @@ Project is broken into 4 phases.
 - Data collection using database system: 20DEC24 (SPRINT 1)
 - Barcode Generator using python (specifically Barcode and ImageWriter libraries): 20DEC24 (SPRINT 1)
 - Barcode Scanner: 20DEC24 (SPRINT 1)
-- Data PDF Compiler: 25JAN24 (SPRINT 2)
+- Data PDF Compiler: 20JAN24 (SPRINT 2)
 - User authentication system: 20JAN24 (SPRINT 2)
 - Admin Authentication system: 20JAN24 (SPRINT 2)
 - Live time tracking system: 20JAN24 (SPRINT 2)
 - Automated Emailer Sender System: 20JAN24 (SPRINT 2)
-- Node development system: 25FEB24 (SPRINT 3)
-- Node testing 25FEB24(SPRINT 3)
+- Node development system: 20FEB24 (SPRINT 3)
+- Node testing 20FEB24(SPRINT 3)
 
 ### Faculty SME
 - LCDR Downs (SME)
