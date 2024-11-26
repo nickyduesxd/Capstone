@@ -68,6 +68,7 @@ Project is broken into 4 phases.
 - Phase 3: User interface development - User Interface
     - Real Time Tracking System
     - Volunteer/Admin Authentication System
+    - Automated email sender
 - Phase 4: Network development
     - Setting up the nodes alonsgide transport layer system and phasing in with the UI.
     - Testing our network system
@@ -82,8 +83,9 @@ Project is broken into 4 phases.
 - User authentication system: 20JAN24 (SPRINT 2)
 - Admin Authentication system: 20JAN24 (SPRINT 2)
 - Live time tracking system: 20JAN24 (SPRINT 2)
+- Automated Emailer Sender System: 20JAN24 (SPRINT 2)
 - Node development system: 25FEB24 (SPRINT 3)
-- Node testing (SPRINT 3)
+- Node testing 25FEB24(SPRINT 3)
 
 ### Faculty SME
 - LCDR Downs (SME)
