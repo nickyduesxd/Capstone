@@ -60,15 +60,16 @@ Communication System [here.](Literature_Review.md)
 ### Premilinary Release Plan
 Project is broken into 4 phases.
 - Phase 1: Reconaissance (Attend the Marine Corps Marathon as observers in order to see the technology used as well as how gameday looks like)
-- Phase 2: User interface development - Barcode
+- Phase 2: User interface development
     - Barcode Technology over view
     - Barcode generation system
     - Barcode reading script
     - Database System
-- Phase 3: User interface development - User Interface
+- Phase 3: User interface development
     - Real Time Tracking System
     - Volunteer/Admin Authentication System
     - Automated email sender
+    - PDF Compiler
 - Phase 4: Network development
     - Setting up the nodes alonsgide transport layer system and phasing in with the UI.
     - Testing our network system
