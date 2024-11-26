@@ -73,13 +73,13 @@ Project is broken into 4 phases.
   
 ### Product Back Log
 - Reconassiance: USMC Marathon MO 27OCT2024
-- Barcode Generator using python (specifically Barcode and ImageWriter libraries): 08DEC24
-- Barcode Scanner: 08DEC24
 - Data entry using web server interface: 20DEC24
 - Data collection using database system: 20DEC24
-- Data projection using app interface: 12JAN24
-- User authentication system: 25JAN24
-- Admin Authentication system: 25JAN24
+- Barcode Generator using python (specifically Barcode and ImageWriter libraries): 20DEC24
+- Barcode Scanner: 20DEC24
+- Data projection using app interface: 20JAN24
+- User authentication system: 20JAN24
+- Admin Authentication system: 20JAN24
 - Live time tracking system: 10FEB24
 - Node development system: 25FEB24
 
