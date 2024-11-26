@@ -64,24 +64,26 @@ Project is broken into 4 phases.
     - Barcode Technology over view
     - Barcode generation system
     - Barcode reading script
-- Phase 3: User interface development - User Interface
-    - Data entry phased with barcode system
     - Database System
-    - Tracking System
+- Phase 3: User interface development - User Interface
+    - Real Time Tracking System
+    - Volunteer/Admin Authentication System
 - Phase 4: Network development
     - Setting up the nodes alonsgide transport layer system and phasing in with the UI.
+    - Testing our network system
   
 ### Product Back Log
 - Reconassiance: USMC Marathon MO 27OCT2024
-- Data entry using web server interface: 20DEC24
-- Data collection using database system: 20DEC24
-- Barcode Generator using python (specifically Barcode and ImageWriter libraries): 20DEC24
-- Barcode Scanner: 20DEC24
-- Data projection using app interface: 20JAN24
-- User authentication system: 20JAN24
-- Admin Authentication system: 20JAN24
-- Live time tracking system: 10FEB24
-- Node development system: 25FEB24
+- Data entry using web server interface: 20DEC24 (SPRINT 1)
+- Data collection using database system: 20DEC24 (SPRINT 1)
+- Barcode Generator using python (specifically Barcode and ImageWriter libraries): 20DEC24 (SPRINT 1)
+- Barcode Scanner: 20DEC24 (SPRINT 1)
+- Data PDF Compiler: 25JAN24 (SPRINT 2)
+- User authentication system: 20JAN24 (SPRINT 2)
+- Admin Authentication system: 20JAN24 (SPRINT 2)
+- Live time tracking system: 20JAN24 (SPRINT 2)
+- Node development system: 25FEB24 (SPRINT 3)
+- Node testing (SPRINT 3)
 
 ### Faculty SME
 - LCDR Downs (SME)
