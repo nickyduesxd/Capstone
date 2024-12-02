@@ -31,14 +31,14 @@ The Marine Corps Marathon is a large event and high visibility with ~70,000 part
 ## Market Resarch/Literature Review:
 ### Existing Process
 - HAM Radios communication system. There are HAM radio operators strategically located throughout the route at medical tents that communicate with headquarters to report medical casaulties. There are 2 antennas put up.
-- Once the medical casaulty is recieved by the individual at headquarters, it is recorded and inserted by hand into their internal database.
+- Once the medical casaulty is recieved by the individual at headquarters, it is recorded and inserted by hand into their internal database which is also a website.
 - This internal database runs at live-time so at the command center located at the G6 shack the head of the medical team can actively track on medical casualties throughout the course with their system.  
 
 ### Market Research (And why our proposed system is better)
-- Google form: Hard to compile and show data, as well as edit previous responses.
-- Chat Box: Can get disorganized and hard to compile data.
-- Voice Transmission: Can get chaotic with multiple voice transmissions happening at the same time.
-- App: Limited by system design of phone IOS vs Andriod.
+- Google form: Has limited design options, difficulty managing responses, concerns regarding privacy and security when collecting large amounts of personal information. Our design has more features, live tracking, and data analyses (updates map on number of casualties at certain locations).
+- Chat Box: Can get disorganized and hard to compile data. Hard to adjust previous responses as well as perform any sort of analyses. Our design allows for volunteers to edit medical casualty reports with updates, as well as provide live time analytics based on location, easily store reports, and access them (instead of scrolling to find information on a specific casualty when using a chat box).
+- Voice Transmission: Can get chaotic with multiple voice transmissions happening at the same time. Also data will have to be stored on hand or if using some sort of system (voice to text) has issues on proper format.
+- App: Limited by system design of phone IOS vs Andriod. Volunteers have different phones so an app that connects between IPhone and Andriod will have issues.
 
 ### Literature Review: 
 Communication System [here.](Literature_Review.md)
@@ -57,36 +57,20 @@ Communication System [here.](Literature_Review.md)
 - We intend to construct a meshed network using nodes bought from Eltec Automation [product_page](https://heltec.org/project/wifi-lora-32-v3/) with transceivers from semtech [product_page](https://www.semtech.com/products/wireless-rf/lora-transceivers/sx1276) and use the physical and transport systems from radio head [library_page](https://www.airspayce.com/mikem/arduino/RadioHead/).
 
 ## Project Management
-### Premilinary Release Plan
-Project is broken into 4 phases.
-- Phase 1: Reconaissance (Attend the Marine Corps Marathon as observers in order to see the technology used as well as how gameday looks like)
-- Phase 2: User interface development
-    - Barcode Technology over view
-    - Barcode generation system
-    - Barcode reading script
-    - Database System
-- Phase 3: User interface development
-    - Real Time Tracking System
-    - Volunteer/Admin Authentication System
-    - Automated email sender
-    - PDF Compiler
-- Phase 4: Network development
-    - Setting up the nodes alonsgide transport layer system and phasing in with the UI.
-    - Testing our network system
   
-### Product Back Log
+### Product Back Log With Dates/Sprints
 - Reconassiance: USMC Marathon MO 27OCT2024
-- Data entry using web server interface: 20DEC24 (SPRINT 1)
-- Data collection using database system: 20DEC24 (SPRINT 1)
-- Barcode Generator using python (specifically Barcode and ImageWriter libraries): 20DEC24 (SPRINT 1)
-- Barcode Scanner: 20DEC24 (SPRINT 1)
-- Data PDF Compiler: 20JAN24 (SPRINT 2)
-- User authentication system: 20JAN24 (SPRINT 2)
-- Admin Authentication system: 20JAN24 (SPRINT 2)
-- Live time tracking system: 20JAN24 (SPRINT 2)
-- Automated Emailer Sender System: 20JAN24 (SPRINT 2)
-- Node development system: 20FEB24 (SPRINT 3)
-- Node testing 20FEB24(SPRINT 3)
+- Data entry using web server interface: 10DEC24 (SPRINT 1)
+- Data collection using database system: 10DEC24 (SPRINT 1)
+- Barcode Generator using python (specifically Barcode and ImageWriter libraries): 24DEC24 (SPRINT 2)
+- Barcode Scanner: 24DEC24 (SPRINT 2)
+- Data PDF Compiler: 24DEC24 (SPRINT 2)
+- Use Node Transport Layer on Laptop to connect to Web Server: 24DEC24 (SPRINT 2)
+- User authentication system: 15JAN24 (SPRINT 3)
+- Admin Authentication system: 15JAN24 (SPRINT 3)
+- Connect Laptop to Node and connect to another Laptop through the Node to access Web Server: 15JAN24 (SPRINT 3)
+- Automated Emailer Sender System: 15JAN24 (SPRINT 3)
+- Live time tracking and analytic system: 30JAN24 (SPRINT 4)
 
 ### Faculty SME
 - LCDR Downs (SME)
