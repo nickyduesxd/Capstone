@@ -3,10 +3,10 @@ const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 
-// Path to your server file
+// Path to server file
 const server = require('./server');  // Assuming your server file is called "server.js"
 
-// Path to your user data file
+// Path to user data file
 const userDataFilePath = path.join(__dirname, 'users.json');
 
 // Clear the users.json file before tests (to start fresh)

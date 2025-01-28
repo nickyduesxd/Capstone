@@ -4,6 +4,10 @@
 - Zeyad Elgendy (Cyber Operations Major)
 - Nicholas Zayfman (Computer Science Major)
 
+## Faculty Advisors
+- Professor Dias
+- LCDR Downs
+
 ## Description
 The Marine Corps Marathon currently uses a HAM radio system in order to communicated medical information. 
 We are tasked with designing a new system to replace the current one.
@@ -23,3 +27,14 @@ security is hightened and surrounds sensitive areas such as the Pentagon and the
 - Completed Research Paper Draft and recieved feedback from faculty
 - Presented Capstone Proposal to both Computer Science and Cyber Operations sections
 
+## How to navigate this Github Repository
+- The developer_guide has
+- The user_guide has 
+- The research_paper has our
+- The presentation has our Capstone presentation and presentation board.
+- The UI has our website.
+- The node has our network.
+- The sprint_logs has the documentation of our scrum process.
+- The licenses has information on the libraries and packages we used as well as their respective licenses.
+- The proposal has the approved capstone proposal
+- The charter has our group agreement

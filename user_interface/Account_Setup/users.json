@@ -1,0 +1,18 @@
+[
+    {
+        "first_name": "Nicholas",
+        "last_name": "Zayfman",
+        "role": "Administrator",
+        "email": "m257050@usna.edu",
+        "password": "$2b$12$X5xVXphBAR/OBZQ2e59Bj.H/0bVJ9.R5ayqwhooRhtGxk9Xu12i66",
+        "new_password_set": false
+    },
+    {
+        "first_name": "Zeyad",
+        "last_name": "Elgendy",
+        "role": "Administrator",
+        "email": "m251587@usna.edu",
+        "password": "$2b$12$Gd4lSe4HozHJNI/SjP25Z.94i0S/KXdptHUXCRNjP0WMPWtG3Q76W",
+        "new_password_set": false
+    }
+]

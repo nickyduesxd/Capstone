@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marine Corps Marathon First Aid Report Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        textarea {
+            height: 100px;
+        }
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h1>First Aid Report Form – Marathon Event</h1>
+
+    <form action="#" method="POST">
+        <!-- Incident Details -->
+        <div class="form-section">
+            <h3>Incident Details</h3>
+            <label for="incident-date">Date of Incident:</label>
+            <input type="date" id="incident-date" name="incident-date" required>
+            
+            <label for="incident-time">Time of Incident:</label>
+            <input type="time" id="incident-time" name="incident-time" required>
+            
+            <label for="incident-location">Location of Incident:</label>
+            <input type="text" id="incident-location" name="incident-location" placeholder="e.g., mile marker, hydration station" required>
+        </div>
+
+        <!-- Injured Person Details -->
+        <div class="form-section">
+            <h3>Injured Person Details</h3>
+            <label for="person-name">Full Name:</label>
+            <input type="text" id="person-name" name="person-name" required>
+
+            <label for="person-contact">Contact Number:</label>
+            <input type="tel" id="person-contact" name="person-contact" required>
+
+            <label for="person-email">Email Address:</label>
+            <input type="email" id="person-email" name="person-email" required>
+        </div>
+
+        <!-- Injury/Illness Details -->
+        <div class="form-section">
+            <h3>Injury/Illness Details</h3>
+            <label for="injury-type">Type of Injury/Illness:</label>
+            <input type="text" id="injury-type" name="injury-type" required>
+
+            <label for="affected-body-part">Affected Body Part(s):</label>
+            <input type="text" id="affected-body-part" name="affected-body-part" required>
+
+            <label for="visible-symptoms">Visible Symptoms:</label>
+            <textarea id="visible-symptoms" name="visible-symptoms" placeholder="e.g., bleeding, bruising, swelling, dizziness, etc." required></textarea>
+
+            <label for="cause">Cause of Incident:</label>
+            <input type="text" id="cause" name="cause" required>
+        </div>
+
+        <!-- First Aid Treatment Given -->
+        <div class="form-section">
+            <h3>First Aid Treatment Provided</h3>
+            <label for="first-aid-measures">First Aid Measures Taken:</label>
+            <textarea id="first-aid-measures" name="first-aid-measures" placeholder="e.g., applied bandage, gave water, performed CPR" required></textarea>
+
+            <label for="treatment-details">Details of Treatment:</label>
+            <textarea id="treatment-details" name="treatment-details" placeholder="e.g., time treatment was administered, any medication given, method of application" required></textarea>
+        </div>
+
+        <!-- First Aider Details -->
+        <div class="form-section">
+            <h3>First Aider Details</h3>
+            <label for="first-aider-name">Name of First Aider:</label>
+            <input type="text" id="first-aider-name" name="first-aider-name" required>
+
+            <label for="first-aider-contact">Contact Number:</label>
+            <input type="tel" id="first-aider-contact" name="first-aider-contact" required>
+
+            <label for="first-aider-qualification">Qualification/Training:</label>
+            <input type="text" id="first-aider-qualification" name="first-aider-qualification" required>
+        </div>
+
+        <!-- Witness Details -->
+        <div class="form-section">
+            <h3>Witnesses (if any)</h3>
+            <label for="witness-name-1">Witness 1 Name:</label>
+            <input type="text" id="witness-name-1" name="witness-name-1">
+
+            <label for="witness-contact-1">Witness 1 Contact Number:</label>
+            <input type="tel" id="witness-contact-1" name="witness-contact-1">
+
+            <label for="witness-name-2">Witness 2 Name:</label>
+            <input type="text" id="witness-name-2" name="witness-name-2">
+
+            <label for="witness-contact-2">Witness 2 Contact Number:</label>
+            <input type="tel" id="witness-contact-2" name="witness-contact-2">
+        </div>
+
+        <!-- Additional Notes -->
+        <div class="form-section">
+            <h3>Additional Notes (if any)</h3>
+            <textarea id="additional-notes" name="additional-notes" placeholder="Any other relevant details"></textarea>
+        </div>
+
+        <!-- Signature -->
+        <div class="form-section">
+            <label for="first-aider-signature">First Aider’s Signature:</label>
+            <input type="text" id="first-aider-signature" name="first-aider-signature" required>
+
+            <label for="signature-date">Date:</label>
+            <input type="date" id="signature-date" name="signature-date" required>
+        </div>
+
+        <div class="form-footer">
+            <button type="submit">Submit Report</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
