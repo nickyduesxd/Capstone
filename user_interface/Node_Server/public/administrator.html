@@ -7,4 +7,51 @@
 </head>
 <body>
   <h1>Administrator</h1>
-  </body>
+
+  <!-- Form for file upload -->
+  <form id="file-upload-form" enctype="multipart/form-data">
+    <label for="file">Choose a file:</label>
+    <input type="file" id="file" name="file" accept=".csv">
+    
+    <button type="button" onclick="uploadFile()">Upload</button>
+  </form>
+
+  <script>
+    // Function to handle file upload when the button is clicked
+    function uploadFile() {
+      const fileInput = document.getElementById('file');
+      const file = fileInput.files[0]; // Get the file from input
+
+      if (file) {
+        // Create a FormData object to send the file to the server
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Create an XMLHttpRequest to send the file
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload', true); // Ensure this endpoint matches the server-side route
+
+        // Set up a callback for when the upload is completed
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            alert('File uploaded successfully');
+          } else {
+            alert('Error uploading file. Server returned: ' + xhr.status);
+          }
+        };
+
+        // Error handling
+        xhr.onerror = function() {
+          alert('An error occurred while uploading the file.');
+        };
+
+        // Send the FormData with the file to the server
+        xhr.send(formData);
+      } else {
+        alert('Please select a file first.');
+      }
+    }
+  </script>
+
+</body>
+</html>

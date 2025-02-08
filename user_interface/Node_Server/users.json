@@ -1,7 +1,20 @@
 [
-  {
-    "username": "testuser",
-    "password": "$2a$10$w5rHSGc.0SlRG46lrhZtQu//z2wjMQsFWQq60nyC27wMdY3B.MAIC",
-    "role": "admin"
-  }
+    {
+        "first_name": "Nicholas",
+        "last_name": "Zayfman",
+        "username": "NZayfman",
+        "role": "Administrator",
+        "email": "m257050@usna.edu",
+        "password": "$2b$12$VZTNwqzLzK59IUFumyEOBu/4qBbRNI.79Z6gNGkfIq9YWSQmv9r4O",
+        "new_password_set": false
+    },
+    {
+        "first_name": "Zeyad",
+        "last_name": "Elgendy",
+        "username": "ZElgendy",
+        "role": "Administrator",
+        "email": "m251587@usna.edu",
+        "password": "$2b$12$VSgEV7spxdAR6blxQoCc/eaClxn1IVliXlILvZ62LhX3f3mSdF8CG",
+        "new_password_set": false
+    }
 ]

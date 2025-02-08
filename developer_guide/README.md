@@ -13,7 +13,7 @@ This project uses a Node.js server with an authentication and form submission fu
 
 # Code Walkthrough
 server.js : This file contains all the logic for hadnling HTTP request, processing form data, and managing user authentications.
-
+account_setup.py: This file reads in a csv file with volunteer names, emails, and generates a strong password that they will be prompted to change once they log in.
 public/ : The directory that holds these files: login.html, administrator.html, volunteer.html, developer.html
 - login.html: Log in page
 - administrator.html: Host the live tracking feature
