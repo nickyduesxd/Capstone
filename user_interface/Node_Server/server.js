@@ -1,3 +1,4 @@
+
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
@@ -5,7 +6,6 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');  // Multer for file uploads
 const { exec } = require('child_process');  // Node.js module to execute Python script
-
 const app = express();
 const port = 3017;
 
@@ -70,9 +70,10 @@ app.post('/login', (req, res) => {
       // Compare the hashed password with the stored hash
       bcrypt.compare(password, user.password, (err, result) => {
         if (result && user.new_password_set == false){
-          res.redirect('/newlogin') //Page to set new password
+          res.redirect('/newlogin.html') //Page to set new password
           user.new_password_set = true
         }
+        else {
         if (result) {
           // check user role and redirect accordingly
           if (user.role === 'Administrator')
@@ -94,11 +95,58 @@ app.post('/login', (req, res) => {
         } else {
           res.redirect('/login.html');
         }
+      }
       });
     } else {
       res.redirect('/login.html');
     }
   });
+});
+
+//Handle the new password
+app.post('/submit_password_change', (req, res) => {
+  const { username, old_password, new_password, confirm_new_password } = req.body;
+
+  // Example validation logic (you can replace this with real validation)
+  if (new_password !== confirm_new_password) {
+    return res.status(400).send('Passwords do not match!');
+  }
+
+  // Read user data from the JSON file
+  fs.readFile(userDataFilePath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).send('Error reading user data file');
+    }
+
+    let users = [];
+    try {
+      users = JSON.parse(data);  // Parse the JSON data into a JavaScript array
+    } catch (parseError) {
+      return res.status(500).send('Error parsing user data file');
+    }
+
+    // Find the user by username
+    const user = users.find((u) => u.username === username);
+  // Simulate checking the old password (In real scenarios, you would check with the database)
+
+    bcrypt.compare(old_password, user.password, (err, result) => {
+      if (result){
+        user.new_password_set = true
+        user.password = bcrypt.hashSync(new_password, bcrypt.genSaltSync(10));
+        // Save the updated users array back to the JSON file
+        fs.writeFile('users.json', JSON.stringify(users, null, 2), (writeError) => {
+          if (writeError) {
+            return res.status(500).send('Error saving user data');
+          }
+        res.redirect('login.html') //Page to set new password
+        });
+      }
+      else {
+        return res.status(400).send('Old password is incorrect!');
+      }
+    });
+  });
+
 });
 
 // Route to handle file upload and call python script (account_setup.py)
