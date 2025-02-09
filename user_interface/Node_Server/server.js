@@ -70,7 +70,23 @@ app.post('/login', (req, res) => {
       // Compare the hashed password with the stored hash
       bcrypt.compare(password, user.password, (err, result) => {
         if (result) {
-          res.redirect('/volunteer.html');
+          // check user role and redirect accordingly
+          if (user.role === 'Administrator')
+          {
+
+            res.redirect('/administrator.html');
+
+          }
+
+          else if (user.role === 'Volunteer')
+          {
+            res.redirect('/volunteer.html');
+          }
+
+          else {
+            res.status(403).send('Unauthorized role')
+          }
+          
         } else {
           res.redirect('/login.html');
         }
@@ -108,8 +124,6 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
 
   // Call the Python script to convert CSV to JSON
-  //exec(`python Account_Setup/account_setup.py "${normalizedFilePath}" users.json`, (err, stdout, stderr) => {
-  //csv_file = "C:\\Users\\ndzay\\Capstone\\user_interface\\Node_Server\\uploads\\data_sample_test.csv"
   csv_file = filePath;
   //exec(`python account_setup.py "${normalizedFilePath}" users.json`, (err, stdout, stderr) => {
     const pythonProcess = exec(`python account_setup.py "${csv_file}" users.json`, (err, stdout, stderr) => {
@@ -143,76 +157,3 @@ app.listen(port, () => {
 });
 
 
-
-
-/*
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const bodyParser = require('body-parser');
-const fs = require('fs');
-const path = require('path');
-
-const app = express();
-const port = 3017;
-
-// Middleware to parse form data
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Path to the JSON file where user data will be stored
-const userDataFilePath = path.join(__dirname, 'users.json');
-
-// Serve static files (like HTML)
-app.use(express.static('public'));
-
-// Route to display login page
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'volunteer.html'));
-});
-
-// Redirect the root URL to the desired page
-app.get('/', (req, res) => {
-  res.redirect('/login');
-  });
-
-
-// Route to handle login form submission
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-
-  // Read user data from the JSON file
-  fs.readFile(userDataFilePath, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).send('Error reading user data file');
-    }
-
-    let users = [];
-    try {
-      users = JSON.parse(data);  // Parse the JSON data into a JavaScript array
-    } catch (parseError) {
-      return res.status(500).send('Error parsing user data file');
-    }
-
-    // Find the user by username
-    const user = users.find((u) => u.username === username);
-
-    if (user) {
-      // Compare the hashed password with the stored hash
-      bcrypt.compare(password, user.password, (err, result) => {
-        if (result) {
-          res.redirect('/volunteer.html');
-        } else {
-          res.redirect('/login.html');
-        }
-      });
-    } else {
-      //return res.send('User not found');
-      res.redirect('/login.html');
-    }
-  });
-});
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}/login.html`);
-});
-*/
