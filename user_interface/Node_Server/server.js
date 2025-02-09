@@ -69,6 +69,10 @@ app.post('/login', (req, res) => {
     if (user) {
       // Compare the hashed password with the stored hash
       bcrypt.compare(password, user.password, (err, result) => {
+        if (result && user.new_password_set == false){
+          res.redirect('/newlogin') //Page to set new password
+          user.new_password_set = true
+        }
         if (result) {
           res.redirect('/volunteer.html');
         } else {
@@ -108,8 +112,6 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
 
   // Call the Python script to convert CSV to JSON
-  //exec(`python Account_Setup/account_setup.py "${normalizedFilePath}" users.json`, (err, stdout, stderr) => {
-  //csv_file = "C:\\Users\\ndzay\\Capstone\\user_interface\\Node_Server\\uploads\\data_sample_test.csv"
   csv_file = filePath;
   //exec(`python account_setup.py "${normalizedFilePath}" users.json`, (err, stdout, stderr) => {
     const pythonProcess = exec(`python account_setup.py "${csv_file}" users.json`, (err, stdout, stderr) => {
