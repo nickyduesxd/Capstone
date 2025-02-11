@@ -1,7 +1,13 @@
+/**
+ * This file is our web sever's backend, maintains website functionality
+ * Nicholas Zayfman & Zeyad Elgendy
+ */
+
 
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
+const { PDFDocument, rgb } = require('pdf-lib');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');  // Multer for file uploads
@@ -146,7 +152,35 @@ app.post('/submit_password_change', (req, res) => {
       }
     });
   });
+});
 
+// Handle form submission
+app.post('/submit_form', (req, res) => {
+  const formData = req.body;
+
+  // Read the existing data from the JSON file (if any)
+  fs.readFile('reports.json', (err, data) => {
+      if (err) {
+          console.log('Error reading file:', err);
+      }
+
+      let reports = [];
+      if (data.length > 0) {
+          reports = JSON.parse(data);
+      }
+
+      // Add new report data
+      reports.push(formData);
+
+      // Save the updated reports back to the JSON file
+      fs.writeFile('reports.json', JSON.stringify(reports, null, 2), (err) => {
+          if (err) {
+              console.log('Error saving file:', err);
+              return res.status(500).send('Error saving data.');
+          }
+          return res.redirect('volunteer.html')
+      });
+  });
 });
 
 // Route to handle file upload and call python script (account_setup.py)
@@ -203,6 +237,80 @@ app.post('/upload', upload.single('file'), (req, res) => {
       console.log(`Python process exited with code ${code}`);
     });
   });
+
+  /*
+    The function below generates the compile medical report from the reports.json file and downloads
+    it on the administrator's computer.
+  */
+  app.get('/generate-pdf', async (req, res) => {
+    try {
+      // Read reports.json
+      const reportsPath = path.join(__dirname, 'reports.json');
+      if (!fs.existsSync(reportsPath)) {
+        res.status(404).send('reports.json not found');
+        return;
+      }
+      const reportsData = JSON.parse(fs.readFileSync(reportsPath, 'utf8'));
+  
+      // Create a new PDF document
+      const pdfDoc = await PDFDocument.create();
+  
+      // Add a page to the document
+      let page = pdfDoc.addPage([600, 800]);
+      const { width, height } = page.getSize();
+  
+      // Set up a font
+      const font = await pdfDoc.embedStandardFont('Helvetica');
+  
+      // Set up starting position for the text
+      let yPosition = height - 40;
+  
+      // Loop through reports and add each to the PDF
+      reportsData.forEach((report, index) => {
+        // Check if the current page is full, and if so, add a new page
+        if (yPosition < 40) {
+          page = pdfDoc.addPage([600, 800]); // Add a new page if the current one is full
+          yPosition = height - 40;
+        }
+  
+        // Add report details to the PDF
+        page.drawText(`Incident Report #${index + 1}`, { x: 20, y: yPosition, size: 14, font, color: rgb(0, 0, 0) });
+        yPosition -= 20;
+  
+        Object.keys(report).forEach((key) => {
+          const value = report[key];
+          page.drawText(`${key.replace(/-/g, ' ').toUpperCase()}: ${value}`, { x: 20, y: yPosition, size: 10, font, color: rgb(0, 0, 0) });
+          yPosition -= 20;
+        });
+  
+        // Add a space between reports
+        yPosition -= 20;
+      });
+  
+      // Serialize the PDF document to bytes
+      const pdfBytes = await pdfDoc.save();
+  
+      // Save to a local file for debugging purposes
+      const outputPath = path.join(__dirname, 'incident_reports.pdf');
+      fs.writeFileSync(outputPath, pdfBytes);
+      console.log(`PDF saved to: ${outputPath}`);
+  
+      // Set response headers for PDF download
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename=medical_compiled_report.pdf');
+      res.setHeader('Content-Encoding', 'identity'); // Avoid compression issues
+  
+      // Send the PDF buffer as a response
+      res.end(pdfBytes); // Use `res.end()` to send the PDF buffer
+  
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      res.status(500).send('An error occurred while generating the PDF.');
+    }
+  });
+  
+
+  
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}/login.html`);

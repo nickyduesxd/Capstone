@@ -37,6 +37,16 @@
             text-align: center;
             margin-top: 20px;
         }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .search-container input {
+            width: 48%;
+            margin-right: 4%;
+        }
+        .search-container button {
+            width: 48%;
+        }
     </style>
 </head>
 <body>
@@ -44,7 +54,22 @@
 <div class="form-container">
     <h1>First Aid Report Form – Marine Corps Marathon Event</h1>
 
-    <form action="#" method="POST">
+    <!-- Search Bar Section -->
+    <div class="search-container">
+        <h3>Search for a Report</h3>
+        <form action="/search_form" method="GET">
+            <label for="search-name">Search by Injured Person's Name (optional):</label>
+            <input type="text" id="search-name" name="search-name" placeholder="Enter full name">
+            
+            <label for="search-injury-type">Search by Injury Type (optional):</label>
+            <input type="text" id="search-injury-type" name="search-injury-type" placeholder="Enter injury type">
+
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Report Submission Form -->
+    <form action="/submit_form" method="POST">
         <!-- Incident Details -->
         <div class="form-section">
             <h3>Incident Details</h3>

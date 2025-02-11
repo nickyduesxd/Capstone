@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrator</title>
+</head>
+<body>
+  <h1>Administrator</h1>
+
+  <!-- Form for file upload -->
+  <h1>Generate Volunteer Accounts</h1>
+  <form id="file-upload-form" enctype="multipart/form-data">
+    <label for="file">Choose a file:</label>
+    <input type="file" id="file" name="file" accept=".csv">
+    
+    <button type="button" onclick="uploadFile()">Upload</button>
+  </form>
+
+  <!-- Button to generate PDF -->
+  <br><br>
+  <h1>Generate Compiled Medical Form PDF</h1>
+  <button type="button" onclick="generatePDF()">Generate PDF</button>
+
+
+
+  
+  <script>
+    // Function to handle file upload when the button is clicked
+    function uploadFile() {
+      const fileInput = document.getElementById('file');
+      const file = fileInput.files[0]; // Get the file from input
+
+      if (file) {
+        // Create a FormData object to send the file to the server
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Create an XMLHttpRequest to send the file
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload', true); // Ensure this endpoint matches the server-side route
+
+        // Set up a callback for when the upload is completed
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            alert('File uploaded successfully');
+          } else {
+            alert('Error uploading file. Server returned: ' + xhr.status);
+          }
+        };
+
+        // Error handling
+        xhr.onerror = function() {
+          alert('An error occurred while uploading the file.');
+        };
+
+        // Send the FormData with the file to the server
+        xhr.send(formData);
+      } else {
+        alert('Please select a file first.');
+      }
+    }
+
+    // Function to request the server to generate and download a PDF
+    function generatePDF() {
+      // Create a request to the backend to generate a PDF
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '/generate-pdf', true); // The endpoint that triggers the Python script
+
+      // When the response is ready, handle the PDF download
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          // Create a Blob from the PDF data
+          const blob = new Blob([xhr.response], { type: 'application/pdf' });
+          const link = document.createElement('a');
+          
+          // Create a download link for the generated PDF
+          link.href = URL.createObjectURL(blob);
+          link.download = 'generated_report.pdf'; // Name of the file to download
+          link.click(); // Trigger the download
+        } else {
+          alert('Error generating PDF. Server returned: ' + xhr.status);
+        }
+      };
+
+      // Set the response type to blob (for binary data)
+      xhr.responseType = 'arraybuffer';
+
+      // Error handling
+      xhr.onerror = function() {
+        alert('An error occurred while generating the PDF.');
+      };
+
+      // Send the request to generate the PDF
+      xhr.send();
+    }
+  </script>
+
+</body>
+</html>
