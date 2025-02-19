@@ -17,8 +17,9 @@ security is hightened and surrounds sensitive areas such as the Pentagon and the
 ## Current Steps
 - Editing Research Paper draft
 - Working on UI (Development- working on code and writing tests)
-- Ordered Nodes for network
-- Creating project Presentation (https://docs.google.com/presentation/d/1x1Ycq-gV-lEZHK0Q1es8ILs1GWJiPB6k/edit?usp=sharing&ouid=114198364629307238569&rtpof=true&sd=true)
+- Working on Network Set Up.
+- Working on documentation
+- Working on recorded demo
 
 ## What we have accomplished so far.
 - Completed Literature Review
@@ -26,13 +27,14 @@ security is hightened and surrounds sensitive areas such as the Pentagon and the
 - Completed Computer Science Capstone Proposal and recieved approval
 - Completed Research Paper Draft and recieved feedback from faculty
 - Presented Capstone Proposal to both Computer Science and Cyber Operations sections
+- Completed Movement Order to G6 (responsible for communications for MCM) in Quantico on 10FEB25.
+- Completed Presentation Board
 
 ## How to navigate this Github Repository
 - The developer_guide has
-- The user_guide has 
-- The research_paper has our
-- The presentation has our Capstone presentation and presentation board.
-- The UI has our website.
+- The research_paper folder has our a pdf version of our paper.
+- The poster folder has our Capstone Poster.
+- The user_interface folder has our website.
 - The node has our network.
 - The sprint_logs has the documentation of our scrum process.
 - The licenses has information on the libraries and packages we used as well as their respective licenses.
