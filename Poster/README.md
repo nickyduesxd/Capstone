@@ -1,1 +1,1 @@
-![alt_text](/poster_screenshot.png)
+![alt_text](poster_screenshot.png)
