@@ -3,15 +3,16 @@
  * Nicholas Zayfman & Zeyad Elgendy
  */
 
-
+// Import packages
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
+const axios = require('axios');  // For making HTTP requests to download the logo
 const { PDFDocument, rgb } = require('pdf-lib');
 const fs = require('fs');
 const path = require('path');
-const multer = require('multer');  // Multer for file uploads
-const { exec } = require('child_process');  // Node.js module to execute Python script
+const multer = require('multer');
+const { exec } = require('child_process');
 const app = express();
 const port = 3017;
 
@@ -41,6 +42,7 @@ const userDataFilePath = path.join(__dirname, 'users.json');
 // Serve static files (like HTML)
 app.use(express.static('public'));
 
+app.use(express.json()); // This will allow you to parse JSON request bodies
 
 // Route to display login page
 app.get('/login', (req, res) => {
@@ -237,80 +239,314 @@ app.post('/upload', upload.single('file'), (req, res) => {
       console.log(`Python process exited with code ${code}`);
     });
   });
-
-  /*
-    The function below generates the compile medical report from the reports.json file and downloads
-    it on the administrator's computer.
-  */
   app.get('/generate-pdf', async (req, res) => {
     try {
       // Read reports.json
       const reportsPath = path.join(__dirname, 'reports.json');
       if (!fs.existsSync(reportsPath)) {
-        res.status(404).send('reports.json not found');
-        return;
+        console.error(`reports.json not found at path: ${reportsPath}`);
+        return res.status(404).send('reports.json not found');
       }
+  
       const reportsData = JSON.parse(fs.readFileSync(reportsPath, 'utf8'));
+      if (!reportsData || !Array.isArray(reportsData)) {
+        return res.status(500).send('Invalid data format in reports.json');
+      }
+  
+      // Download the logo image
+      const logoUrl = 'https://upload.wikimedia.org/wikipedia/en/1/14/Marine_Corps_Marathon_%28logo%29.jpg';
+      const logoResponse = await axios.get(logoUrl, { responseType: 'arraybuffer' });
+      const logoBuffer = Buffer.from(logoResponse.data);
   
       // Create a new PDF document
       const pdfDoc = await PDFDocument.create();
   
-      // Add a page to the document
-      let page = pdfDoc.addPage([600, 800]);
-      const { width, height } = page.getSize();
+      // Embed the logo into the PDF
+      const logoImage = await pdfDoc.embedJpg(logoBuffer);
+      const logoWidth = 150;
+      const logoHeight = (logoImage.height / logoImage.width) * logoWidth; // Scale to desired width
   
-      // Set up a font
-      const font = await pdfDoc.embedStandardFont('Helvetica');
-  
-      // Set up starting position for the text
-      let yPosition = height - 40;
-  
-      // Loop through reports and add each to the PDF
+      // Loop through reports and create each report on a new page
       reportsData.forEach((report, index) => {
-        // Check if the current page is full, and if so, add a new page
-        if (yPosition < 40) {
-          page = pdfDoc.addPage([600, 800]); // Add a new page if the current one is full
-          yPosition = height - 40;
-        }
+        const page = pdfDoc.addPage([600, 800]); // A4 size (portrait)
+        const { width, height } = page.getSize();
   
-        // Add report details to the PDF
-        page.drawText(`Incident Report #${index + 1}`, { x: 20, y: yPosition, size: 14, font, color: rgb(0, 0, 0) });
-        yPosition -= 20;
-  
-        Object.keys(report).forEach((key) => {
-          const value = report[key];
-          page.drawText(`${key.replace(/-/g, ' ').toUpperCase()}: ${value}`, { x: 20, y: yPosition, size: 10, font, color: rgb(0, 0, 0) });
-          yPosition -= 20;
+        // Draw logo at top-right corner
+        page.drawImage(logoImage, {
+          x: (width -logoWidth) / 2,
+          //x: width - logoWidth - 20, // 20px from the right
+          y: height - logoHeight - 20, // 20px from the top
+          width: logoWidth,
+          height: logoHeight,
         });
   
-        // Add a space between reports
-        yPosition -= 20;
+        // Set font and text properties
+        const font = pdfDoc.embedStandardFont('Helvetica');
+        let yPosition = height - logoHeight - 60;  // Starting position for first report
+  
+        // Draw a box around the text
+        const boxWidth = 560;  // Box width
+        const boxHeight = 475; // Box height
+        const boxX = 20;
+        const boxY = yPosition - 500;  // Set y position of the box
+  
+        // Draw the rectangle around the text
+        page.drawRectangle({
+          x: boxX,
+          y: boxY,
+          width: boxWidth,
+          height: boxHeight,
+          borderColor: rgb(0, 0, 0), // Black border color
+          borderWidth: 1,            // Border width
+          color: rgb(1, 1, 1),       // White fill color
+        });
+  
+        // Add report title inside the box
+        page.drawText(`Incident Report #${index + 1}`, {
+          x: boxX + 10, // Padding inside the box
+          y: boxY + boxHeight - 20,
+          size: 14,
+          font,
+          color: rgb(0, 0, 0),
+        });
+  
+        // Add report details inside the box
+        let textYPosition = boxY + boxHeight - 40;
+        Object.keys(report).forEach((key) => {
+          const value = report[key];
+  
+          page.drawText(`${key.replace(/-/g, ' ').toUpperCase()}: ${value}`, {
+            x: boxX + 10,  // Padding inside the box
+            y: textYPosition,
+            size: 12,
+            font,
+            color: rgb(0, 0, 0),
+          });
+          textYPosition -= 20; // Move down for next line
+        });
+  
+        // Draw a line underneath the box with the label "Sensitive Data, PII"
+        const lineStartX = boxX;
+        const lineEndX = boxX + boxWidth;
+        const lineY = textYPosition - 10;  // Position for the line
+  
+        // Draw the line
+        page.drawLine({
+          start: { x: lineStartX, y: lineY },
+          end: { x: lineEndX, y: lineY },
+          color: rgb(0, 0, 0),   // Black color
+          thickness: 1,           // Line thickness
+        });
+  
+        // Add label "Sensitive Data, PII" under the line
+        page.drawText('Sensitive Data, PII', {
+          x: boxX + 10, // Padding
+          y: lineY - 15, // Position under the line
+          size: 10,
+          font,
+          color: rgb(0, 0, 0),
+        });
+  
+        // If space runs out, add a new page
+        if (textYPosition < 40) {
+          textYPosition = height - 40;
+        }
       });
   
       // Serialize the PDF document to bytes
       const pdfBytes = await pdfDoc.save();
   
-      // Save to a local file for debugging purposes
+      // Save PDF to file (for debugging)
       const outputPath = path.join(__dirname, 'incident_reports.pdf');
       fs.writeFileSync(outputPath, pdfBytes);
       console.log(`PDF saved to: ${outputPath}`);
   
       // Set response headers for PDF download
       res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', 'attachment; filename=medical_compiled_report.pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename=incident_reports.pdf');
       res.setHeader('Content-Encoding', 'identity'); // Avoid compression issues
   
       // Send the PDF buffer as a response
-      res.end(pdfBytes); // Use `res.end()` to send the PDF buffer
-  
+      res.end(pdfBytes);
     } catch (error) {
       console.error('Error generating PDF:', error);
-      res.status(500).send('An error occurred while generating the PDF.');
+      res.status(500).send(`An error occurred while generating the PDF: ${error.message}`);
     }
   });
   
-
   
+// Route to handle file upload and call python script (account_setup.py)
+//app.post('/search_form', upload.single('file'), (req, res) => {}
+  app.get('/search_form', (req, res) => {
+    const { 'search-name': name, 'search-injury-type': injuryType } = req.query;
+  
+    // Read the JSON file that contains the reports
+    fs.readFile(path.join(__dirname, 'reports.json'), 'utf-8', (err, data) => {
+      if (err) {
+        return res.status(500).send('Error reading the data file');
+      }
+  
+      let reports = [];
+      try {
+        reports = JSON.parse(data);
+      } catch (parseError) {
+        return res.status(500).send('Error parsing the data file');
+      }
+  
+      // Filter the reports based on search criteria
+      let results = reports.filter(report => {
+        let match = true;
+  
+        // Check if 'name' is defined and contains the search query
+        if (name && report.name && !report.name.toLowerCase().includes(name.toLowerCase())) {
+          match = false;
+        }
+  
+        // Check if 'injuryType' is defined and contains the search query
+        if (injuryType && report.injuryType && !report.injuryType.toLowerCase().includes(injuryType.toLowerCase())) {
+          match = false;
+        }
+  
+        return match;
+      });
+  
+      // Respond with filtered results
+      res.json(results);
+    });
+  });
+// Serve the reports.json file
+app.get('/reports', (req, res) => {
+  res.sendFile(path.join(__dirname, 'reports.json'));
+});  
+
+
+function getReports() {
+  const filePath = path.join(__dirname, 'reports.json');
+  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+}
+
+
+// Save updated reports to the JSON file
+function saveReports(reports) {
+  const filePath = path.join(__dirname, 'reports.json');
+  fs.writeFileSync(filePath, JSON.stringify(reports, null, 2));
+}
+
+// Search for a report by name
+app.get('/searchReport', (req, res) => {
+  const name = req.query.name.toLowerCase();
+  const reports = getReports();
+
+  const report = reports.find(r => r['person-name'].toLowerCase().includes(name));
+
+  if (report) {
+      res.json(report);
+  } else {
+      res.status(404).json({ message: 'Report not found' });
+  }
+});
+app.delete('/deleteReport', (req, res) => {
+  const { name } = req.body; // Make sure this value is passed in the body
+
+  if (!name || typeof name !== 'string') {
+      console.error('Invalid name:', name);
+      return res.status(400).json({ error: "Invalid or missing name" });
+  }
+
+  fs.readFile(reportFilePath, 'utf-8', (err, data) => {
+      if (err) {
+          console.error("Error reading the file:", err);
+          return res.status(500).json({ error: "Failed to read reports" });
+      }
+
+      let reports;
+      try {
+          reports = JSON.parse(data); // Parse the JSON data
+      } catch (parseError) {
+          console.error("Error parsing the JSON file:", parseError);
+          return res.status(500).json({ error: "Failed to parse reports" });
+      }
+
+      // Ensure that name is defined before calling toLowerCase()
+      const index = reports.findIndex(report => {
+          const reportName = report['person-name']; // Get the report's person-name
+          if (!reportName) {
+              console.error('Report missing person-name:', report);
+              return false; // Skip this report if it doesn't have a person-name
+          }
+          return reportName.toLowerCase() === name.toLowerCase();
+      });
+
+      if (index === -1) {
+          return res.status(404).json({ error: "Report not found" });
+      }
+
+      reports.splice(index, 1);
+
+      fs.writeFile(reportFilePath, JSON.stringify(reports, null, 2), 'utf-8', (writeError) => {
+          if (writeError) {
+              console.error("Error writing the file:", writeError);
+              return res.status(500).json({ error: "Failed to update reports" });
+          }
+
+          res.status(200).json({ message: "Report deleted successfully" });
+      });
+  });
+});
+
+// Read reports from JSON file
+function readReports() {
+  const reportsFilePath = path.join(__dirname, 'reports.json');
+  const rawData = fs.readFileSync(reportsFilePath);
+  return JSON.parse(rawData);
+}
+
+// Route to get injury locations and their counts
+app.get('/get-injury-locations', (req, res) => {
+  const reports = readReports();
+  const locationCounts = {};
+
+  // Iterate over reports and count occurrences of each location
+  reports.forEach(report => {
+      const location = report['incident-location'];
+      if (location) {
+          if (locationCounts[location]) {
+              locationCounts[location]++;
+          } else {
+              locationCounts[location] = 1;
+          }
+      }
+  });
+
+  // Convert the location counts into an array of objects for easier display
+  const locations = Object.keys(locationCounts).map(location => ({
+      location,
+      count: locationCounts[location]
+  }));
+
+  res.json(locations); // Send locations and their counts as JSON
+});
+
+// Update a report
+app.put('/updateReport', (req, res) => {
+  const updatedReport = req.body;
+  const reports = getReports();
+
+  // Remove the old report by matching the name
+  const reportIndex = reports.findIndex(r => r['person-name'].toLowerCase() === updatedReport['person-name'].toLowerCase());
+  
+  if (reportIndex === -1) {
+      return res.status(404).json({ message: 'Report not found' });
+  }
+
+  // Replace the old report with the updated one
+  reports[reportIndex] = updatedReport;
+
+  // Save the updated reports
+  saveReports(reports);
+  res.json({ message: 'Report updated successfully' });
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}/login.html`);

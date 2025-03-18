@@ -39,6 +39,7 @@
         }
         .search-container {
             margin-bottom: 20px;
+            text-align: center;
         }
         .search-container input {
             width: 48%;
@@ -51,21 +52,10 @@
 </head>
 <body>
 
-<div class="form-container">
-    <h1>First Aid Report Form – Marine Corps Marathon Event</h1>
-
-    <!-- Search Bar Section -->
+    <!-- Search Form -->
     <div class="search-container">
-        <h3>Search for a Report</h3>
-        <form action="/search_form" method="GET">
-            <label for="search-name">Search by Injured Person's Name (optional):</label>
-            <input type="text" id="search-name" name="search-name" placeholder="Enter full name">
-            
-            <label for="search-injury-type">Search by Injury Type (optional):</label>
-            <input type="text" id="search-injury-type" name="search-injury-type" placeholder="Enter injury type">
-
-            <button type="submit">Search</button>
-        </form>
+        <input type="text" id="search-name" placeholder="Enter person's name" />
+        <button onclick="searchReport()">Search</button>
     </div>
 
     <!-- Report Submission Form -->
@@ -135,21 +125,6 @@
             <input type="text" id="first-aider-qualification" name="first-aider-qualification" required>
         </div>
 
-        <!-- Witness Details -->
-        <div class="form-section">
-            <h3>Witnesses (if any)</h3>
-            <label for="witness-name-1">Witness 1 Name:</label>
-            <input type="text" id="witness-name-1" name="witness-name-1">
-
-            <label for="witness-contact-1">Witness 1 Contact Number:</label>
-            <input type="tel" id="witness-contact-1" name="witness-contact-1">
-
-            <label for="witness-name-2">Witness 2 Name:</label>
-            <input type="text" id="witness-name-2" name="witness-name-2">
-
-            <label for="witness-contact-2">Witness 2 Contact Number:</label>
-            <input type="tel" id="witness-contact-2" name="witness-contact-2">
-        </div>
 
         <!-- Additional Notes -->
         <div class="form-section">
@@ -167,10 +142,174 @@
         </div>
 
         <div class="form-footer">
-            <button type="submit">Submit Report</button>
+            <button type="submit" id="submit-button">Submit Report</button>
+            <br></br>
+            <button type="button" id="update-button" style="display:none" onclick="updateReport()">Update Report</button>
         </div>
     </form>
-</div>
+
+    <script>
+        // Function to search the report and display it in the form
+        async function searchReport() {
+            const name = document.getElementById("search-name").value;
+
+            if (!name) {
+                alert("Please enter a name to search.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/searchReport?name=${name}`);
+                if (response.ok) {
+                    const report = await response.json();
+
+                    // Fill the form with the report data
+                    document.getElementById('incident-date').value = report['incident-date'];
+                    document.getElementById('incident-time').value = report['incident-time'];
+                    document.getElementById('incident-location').value = report['incident-location'];
+                    document.getElementById('person-name').value = report['person-name'];
+                    document.getElementById('person-contact').value = report['person-contact'];
+                    document.getElementById('person-email').value = report['person-email'];
+                    document.getElementById('injury-type').value = report['injury-type'];
+                    document.getElementById('affected-body-part').value = report['affected-body-part'];
+                    document.getElementById('visible-symptoms').value = report['visible-symptoms'];
+                    document.getElementById('cause').value = report['cause'];
+                    document.getElementById('first-aid-measures').value = report['first-aid-measures'];
+                    document.getElementById('treatment-details').value = report['treatment-details'];
+                    document.getElementById('first-aider-name').value = report['first-aider-name'];
+                    document.getElementById('first-aider-contact').value = report['first-aider-contact'];
+                    //document.getElementById('first-aider-qualification').value = report['first-aider-qualification'];
+                    //document.getElementById('witness-name-1').value = report['witness-name-1'];
+                    //document.getElementById('witness-contact-1').value = report['witness-contact-1'];
+                    ///document.getElementById('witness-name-2').value = report['witness-name-2'];
+                    //document.getElementById('witness-contact-2').value = report['witness-contact-2'];
+                    document.getElementById('additional-notes').value = report['additional-notes'];
+                    document.getElementById('first-aider-signature').value = report['first-aider-signature'];
+                    document.getElementById('signature-date').value = report['signature-date'];
+
+                    // Hide submit and show update button
+                    document.getElementById('submit-button').style.display = 'none';
+                    document.getElementById('update-button').style.display = 'inline-block';
+                } else {
+                    alert('Report not found.');
+                }
+            } catch (error) {
+                console.error('Error searching for report:', error);
+                alert('An error occurred while fetching the report.');
+            }
+        }
+
+        // Function to update the report
+        async function updateReport() {
+    const updatedReport = {
+        'incident-date': document.getElementById('incident-date').value,
+        'incident-time': document.getElementById('incident-time').value,
+        'incident-location': document.getElementById('incident-location').value,
+        'person-name': document.getElementById('person-name').value,
+        'person-contact': document.getElementById('person-contact').value,
+        'person-email': document.getElementById('person-email').value,
+        'injury-type': document.getElementById('injury-type').value,
+        'affected-body-part': document.getElementById('affected-body-part').value,
+        'visible-symptoms': document.getElementById('visible-symptoms').value,
+        'cause': document.getElementById('cause').value,
+        'first-aid-measures': document.getElementById('first-aid-measures').value,
+        'treatment-details': document.getElementById('treatment-details').value,
+        'first-aider-name': document.getElementById('first-aider-name').value,
+        'first-aider-contact': document.getElementById('first-aider-contact').value,
+        //'first-aider-qualification': document.getElementById('first-aider-qualification').value,
+        //'witness-name-1': document.getElementById('witness-name-1').value,
+        //'witness-contact-1': document.getElementById('witness-contact-1').value,
+        //'witness-name-2': document.getElementById('witness-name-2').value,
+        //'witness-contact-2': document.getElementById('witness-contact-2').value,
+        'additional-notes': document.getElementById('additional-notes').value,
+        'first-aider-signature': document.getElementById('first-aider-signature').value,
+        'signature-date': document.getElementById('signature-date').value
+    };
+
+    const name = updatedReport['person-name'];
+
+    // First, delete the existing report
+    try {
+        await fetch('/deleteReport', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name })
+        });
+
+        // Then update with the new report
+        const response = await fetch('/updateReport', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedReport)
+        });
+
+        if (response.ok) {
+            alert('Report updated successfully!');
+
+            // Clear form fields
+            document.getElementById('incident-date').value = '';
+            document.getElementById('incident-time').value = '';
+            document.getElementById('incident-location').value = '';
+            document.getElementById('person-name').value = '';
+            document.getElementById('person-contact').value = '';
+            document.getElementById('person-email').value = '';
+            document.getElementById('injury-type').value = '';
+            document.getElementById('affected-body-part').value = '';
+            document.getElementById('visible-symptoms').value = '';
+            document.getElementById('cause').value = '';
+            document.getElementById('first-aid-measures').value = '';
+            document.getElementById('treatment-details').value = '';
+            document.getElementById('first-aider-name').value = '';
+            document.getElementById('first-aider-contact').value = '';
+            //document.getElementById('first-aider-qualification').value = '';
+            //document.getElementById('witness-name-1').value = '';
+            //document.getElementById('witness-contact-1').value = '';
+            //document.getElementById('witness-name-2').value = '';
+            //document.getElementById('witness-contact-2').value = '';
+            document.getElementById('additional-notes').value = '';
+            document.getElementById('first-aider-signature').value = '';
+            document.getElementById('signature-date').value = '';
+
+            // Hide the "Update" button and show the "Submit" button
+            document.querySelector('button[type="button"]').style.display = 'none';
+            document.querySelector('button[type="submit"]').style.display = 'block';
+        } else {
+            alert('Failed to update report.');
+        }
+    } catch (error) {
+        console.error('Error updating report:', error);
+        alert('Error updating the report.');
+    }
+}
+
+// Automatically set current date and time in the form
+window.onload = function() {
+    updateDateTime(); // Set date and time when the page first loads
+    setInterval(updateDateTime, 60000); // Update every minute (60000 ms)
+};
+
+function updateDateTime() {
+    const currentDate = new Date();
+
+    // Format the current date to YYYY-MM-DD
+    const formattedDate = currentDate.toISOString().split('T')[0]; 
+
+    // Format the current time to HH:MM
+    const formattedTime = currentDate.toTimeString().split(' ')[0].slice(0, 5); 
+
+    // Set the values for date and time inputs
+    document.getElementById('incident-date').value = formattedDate;
+    document.getElementById('incident-time').value = formattedTime;
+    document.getElementById('signature-date').value = formattedDate;
+}
+
+
+    </script>
 
 </body>
+
 </html>
