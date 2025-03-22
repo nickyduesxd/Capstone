@@ -1,5 +1,7 @@
+CCO
+
 Dependencies and Licenses:
-- Node.js: MIT License - look into other licenses in github
+- Node.js: MIT License, zlib license, ISC license, and 0BSD license - more can be found in package-lock.json
 - bcryptjs: MIT License
 - SQLite: Public Domain
 - csv module: Python Software Foundation License
@@ -10,4 +12,3 @@ Dependencies and Licenses:
 - ssl module: Python Software Foundation License
 - email package: Python Software Foundation License
 - unittest module: Python Software Foundation License
- 

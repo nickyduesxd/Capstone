@@ -29,6 +29,7 @@
             color: #757575;
             text-transform: inherit;
             letter-spacing: inherit;
+            text-align: center;
         }
 
         .form-section {
@@ -48,6 +49,13 @@
         th {
             background-color: #f4f4f4;
         }
+
+        .logo-image {
+  display: flex;
+  justify-content: center; /* Horizontally center the logo */
+  align-items: center; /* Vertically center the logo (if needed) */
+  height: 150px; /* Set a specific height for the div */
+}
 
     </style>
 </head>
@@ -84,9 +92,9 @@
             <table id="locations-table" class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>Injury Location</th>
-                        <th>Number of Reports</th>
+                        <th>Total Number of Reports</th>
+                        <th>Reports in the last 15 Minutes</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -152,39 +160,49 @@
 
             xhr.send();
         }
+        
 
-        // Function to fetch and display injury locations with report counts
         function loadInjuryLocations() {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', '/get-injury-locations', true);
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/get-injury-locations', true);
 
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    const locations = JSON.parse(xhr.responseText);
-                    const tableBody = document.getElementById('locations-table').getElementsByTagName('tbody')[0];
-                    tableBody.innerHTML = ''; // Clear previous data
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const locations = JSON.parse(xhr.responseText); // Parse the JSON response
+            console.log(locations);  // Log the locations to verify the structure
 
-                    locations.forEach((location, index) => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `<td>${index + 1}</td><td>${location.location}</td><td>${location.count}</td>`;
-                        tableBody.appendChild(row);
-                    });
-                } else {
-                    alert('Error fetching injury locations. Server returned: ' + xhr.status);
-                }
-            };
+            const tableBody = document.getElementById('locations-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; // Clear previous data
 
-            xhr.onerror = function() {
-                alert('An error occurred while fetching injury locations.');
-            };
-
-            xhr.send();
+            // Add rows for each injury location
+            locations.forEach((locationData) => {
+                console.log(locationData);  // Log each location data object
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${locationData.location}</td> <!-- Injury Location -->
+                    <td>${locationData.count || 0}</td> <!-- Total number of reports -->
+                    <td>${locationData.countInLast15Minutes || 0}</td> <!-- Reports in the last 15 minutes -->
+                `;
+                tableBody.appendChild(row);
+            });
+        } else {
+            alert('Error fetching injury locations. Server returned: ' + xhr.status);
         }
+    };
 
-        // Load injury locations when the page loads
-        window.onload = function() {
-            loadInjuryLocations();
-        }
-    </script>
+    xhr.onerror = function() {
+        alert('An error occurred while fetching injury locations.');
+    };
+
+    xhr.send();
+}
+
+
+// Load injury locations when the page loads
+window.onload = function() {
+    loadInjuryLocations();
+};
+    </script> 
+    
 </body>
 </html>

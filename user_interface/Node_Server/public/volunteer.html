@@ -6,20 +6,29 @@
     <title>Marine Corps Marathon First Aid Report Form</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Roboto", 'Helvetica Neue, Helvetica, Arial', sans-serif; 
+            background: #ff6666;
             margin: 20px;
         }
         h1 {
             text-align: center;
         }
+
+        h3 {
+            text-align: center;
+        }
+
         .form-section {
             margin-bottom: 20px;
+            background-color: #eceff1;
+            margin-left: 10px;
         }
         label {
             font-weight: bold;
+            margin-left: 10px;
         }
         input, textarea {
-            width: 100%;
+            width: 85%;
             padding: 8px;
             margin-top: 5px;
             margin-bottom: 10px;
@@ -28,6 +37,9 @@
         }
         textarea {
             height: 100px;
+        }
+        .form-section h3 {
+            margin-top: 20px;
         }
         .form-container {
             max-width: 800px;
@@ -39,106 +51,258 @@
         }
         .search-container {
             margin-bottom: 20px;
-            text-align: center;
+            display: flex; 
+            align-items:center; 
+            gap: 5px;
+            justify-content: center;
         }
         .search-container input {
             width: 48%;
-            margin-right: 4%;
+            margin-right: 5px;
         }
         .search-container button {
-            width: 48%;
+            width: 5%;
+        }
+        select {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+            margin: 10px 0;
+        }
+        /* Style for the User Guide Button */
+        .user-guide-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #6b0606;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-guide-button:hover {
+            background-color: #a04545;
+        }
+        /* The modal (hidden by default) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* The close button */
+        .close-btn {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Barcode Scanner Input */
+        #barcode-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        /* Scanner status indicator */
+        .scanner-status {
+            text-align: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Search Form -->
-    <div class="search-container">
-        <input type="text" id="search-name" placeholder="Enter person's name" />
-        <button onclick="searchReport()">Search</button>
+    <!-- User Guide Button -->
+    <a href="javascript:void(0);" class="user-guide-button" onclick="openModal()">User Guide</a>
+
+    <!-- Modal (Popup) -->
+    <div id="userGuideModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <!-- You can embed the content of your user guide here -->
+            <iframe src="user-guide.html" width="100%" height="400px"></iframe>
+        </div>
     </div>
 
+    <!-- Search Form -->
+    <div class="search-container">
+        <input type="text" id="search-name" placeholder="Enter person's bib number" />
+        <button onclick="searchReport()">Search</button>
+    </div>
+    
+    <!-- Scanner status indicator -->
+    <div class="scanner-status">
+        Barcode Scanner Ready - Scan Participant Barcode
+    </div>
+    
+    <!-- Hidden input for barcode scanner -->
+    <input type="text" id="barcode-input" autofocus>
+
     <!-- Report Submission Form -->
-    <form action="/submit_form" method="POST">
+    <form action="/submit_form" method="POST" id="report-form">
         <!-- Incident Details -->
         <div class="form-section">
             <h3>Incident Details</h3>
-            <label for="incident-date">Date of Incident:</label>
-            <input type="date" id="incident-date" name="incident-date" required>
-            
-            <label for="incident-time">Time of Incident:</label>
-            <input type="time" id="incident-time" name="incident-time" required>
-            
-            <label for="incident-location">Location of Incident:</label>
-            <input type="text" id="incident-location" name="incident-location" placeholder="e.g., mile marker, hydration station" required>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="incident-date">Date of Incident:</label>
+                <input type="date" id="incident-date" name="incident-date" required>
+            </div>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="incident-time">Time of Incident:</label>
+                <input type="time" id="incident-time" name="incident-time" required>
+            </div>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="incident-location">Location of Incident:</label>
+                <select id="incident-location" name="incident-location" required>
+                    <option value="" disabled selected>Select a medical tent</option>
+                    <option value="A">Medical Tent A</option>
+                    <option value="B">Medical Tent B</option>
+                    <option value="C">Medical Tent C</option>
+                    <option value="D">Medical Tent D</option>
+                    <option value="E">Medical Tent E</option>
+                    <option value="F">Medical Tent F</option>
+                    <option value="G">Medical Tent G</option>
+                    <option value="H">Medical Tent H</option>
+                </select>
+            </div>
         </div>
 
         <!-- Injured Person Details -->
         <div class="form-section">
             <h3>Injured Person Details</h3>
-            <label for="person-name">Full Name:</label>
-            <input type="text" id="person-name" name="person-name" required>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="person-first-name">First Name:</label> 
+                <input type="text" id="person-first-name" name="person-first-name" required>
+            </div>
 
-            <label for="person-contact">Contact Number:</label>
-            <input type="tel" id="person-contact" name="person-contact" required>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="person-last-name">Last Name:</label> 
+                <input type="text" id="person-last-name" name="person-last-name" required>
+            </div>
 
-            <label for="person-email">Email Address:</label>
-            <input type="email" id="person-email" name="person-email" required>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="person-bib">Bib:</label> 
+                <input type="text" id="person-bib" name="person-bib" required>
+            </div>
+
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="person-contact">Contact Number:</label> 
+                <input type="tel" id="person-contact" name="person-contact" required>
+            </div>
+
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="person-email">Email Address:</label> 
+                <input type="email" id="person-email" name="person-email" required>
+            </div>
         </div>
 
-        <!-- Injury/Illness Details -->
+        <!-- Injury Details -->
         <div class="form-section">
-            <h3>Injury/Illness Details</h3>
-            <label for="injury-type">Type of Injury/Illness:</label>
-            <input type="text" id="injury-type" name="injury-type" required>
-
-            <label for="affected-body-part">Affected Body Part(s):</label>
-            <input type="text" id="affected-body-part" name="affected-body-part" required>
-
-            <label for="visible-symptoms">Visible Symptoms:</label>
-            <textarea id="visible-symptoms" name="visible-symptoms" placeholder="e.g., bleeding, bruising, swelling, dizziness, etc." required></textarea>
-
-            <label for="cause">Cause of Incident:</label>
-            <input type="text" id="cause" name="cause" required>
+            <h3>Injury Details</h3>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="injury-type">Type of Injury:</label>
+                <input type="text" id="injury-type" name="injury-type" required> 
+            </div>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="affected-body-part">Affected Body Part(s):</label>
+                <input type="text" id="affected-body-part" name="affected-body-part" required>
+            </div>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="visible-symptoms">Visible Symptoms:</label>
+                <textarea id="visible-symptoms" name="visible-symptoms" placeholder="e.g., bleeding, bruising, swelling, dizziness, etc." required></textarea>
+            </div>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="cause">Cause of Incident:</label>
+                <input type="text" id="cause" name="cause" required>
+            </div>
         </div>
 
         <!-- First Aid Treatment Given -->
         <div class="form-section">
             <h3>First Aid Treatment Provided</h3>
-            <label for="first-aid-measures">First Aid Measures Taken:</label>
-            <textarea id="first-aid-measures" name="first-aid-measures" placeholder="e.g., applied bandage, gave water, performed CPR" required></textarea>
-
-            <label for="treatment-details">Details of Treatment:</label>
-            <textarea id="treatment-details" name="treatment-details" placeholder="e.g., time treatment was administered, any medication given, method of application" required></textarea>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="first-aid-measures">First Aid Measures Taken:</label>
+                <textarea id="first-aid-measures" name="first-aid-measures" placeholder="e.g., applied bandage, gave water, performed CPR" required></textarea>
+            </div>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="treatment-details">Details of Treatment:</label>
+                <textarea id="treatment-details" name="treatment-details" placeholder="e.g., time treatment was administered, any medication given, method of application" required></textarea>
+            </div>
         </div>
 
         <!-- First Aider Details -->
         <div class="form-section">
             <h3>First Aider Details</h3>
-            <label for="first-aider-name">Name of First Aider:</label>
-            <input type="text" id="first-aider-name" name="first-aider-name" required>
-
-            <label for="first-aider-contact">Contact Number:</label>
-            <input type="tel" id="first-aider-contact" name="first-aider-contact" required>
-
-            <label for="first-aider-qualification">Qualification/Training:</label>
-            <input type="text" id="first-aider-qualification" name="first-aider-qualification" required>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="first-aider-name">Name of First Aider:</label>
+                <input type="text" id="first-aider-name" name="first-aider-name" required>
+            </div>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="first-aider-contact">Contact Number:</label>
+                <input type="tel" id="first-aider-contact" name="first-aider-contact" required>
+            </div>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="first-aider-qualification">Qualification/Training:</label>
+                <input type="text" id="first-aider-qualification" name="first-aider-qualification" required>
+            </div>
         </div>
-
 
         <!-- Additional Notes -->
         <div class="form-section">
             <h3>Additional Notes (if any)</h3>
-            <textarea id="additional-notes" name="additional-notes" placeholder="Any other relevant details"></textarea>
+            <div style="text-align: center;">
+                <textarea id="additional-notes" name="additional-notes" placeholder="Any other relevant details"></textarea>
+            </div>
         </div>
 
         <!-- Signature -->
         <div class="form-section">
-            <label for="first-aider-signature">First Aider’s Signature:</label>
-            <input type="text" id="first-aider-signature" name="first-aider-signature" required>
-
-            <label for="signature-date">Date:</label>
-            <input type="date" id="signature-date" name="signature-date" required>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="first-aider-signature">First Aider's Signature:</label>
+                <input type="text" id="first-aider-signature" name="first-aider-signature" required>
+            </div>
+            <div style="display: flex; align-items:center; gap: 10px;">
+                <label for="signature-date">Date:</label>
+                <input type="date" id="signature-date" name="signature-date" required>
+            </div>
         </div>
 
         <div class="form-footer">
@@ -149,12 +313,172 @@
     </form>
 
     <script>
+        // Variable to store barcode scanner input
+let barcodeBuffer = '';
+let lastKeyTime = 0;
+const BARCODE_TIMEOUT = 50; // Timeout between keystrokes (ms)
+let scannerActive = true; // Flag to toggle scanner functionality
+
+// Function to toggle scanner active state
+function toggleScannerState() {
+    scannerActive = !scannerActive;
+    const statusElem = document.querySelector('.scanner-status');
+    if (scannerActive) {
+        statusElem.textContent = "Barcode Scanner Ready - Scan Participant Barcode";
+        statusElem.style.backgroundColor = "#4CAF50";
+        document.getElementById('barcode-input').focus();
+    } else {
+        statusElem.textContent = "Barcode Scanner Paused - Click here to resume";
+        statusElem.style.backgroundColor = "#FF9800";
+    }
+}
+
+// Make the status indicator clickable to toggle scanner
+document.querySelector('.scanner-status').addEventListener('click', toggleScannerState);
+
+// Function to handle keydown events for the barcode scanner
+document.addEventListener('keydown', function(event) {
+    // Only process scanner input if scanner is active
+    if (!scannerActive) return;
+    
+    // Skip processing if focus is on an input field other than the barcode input
+    const activeElement = document.activeElement;
+    if (activeElement.tagName === 'INPUT' || 
+        activeElement.tagName === 'TEXTAREA' || 
+        activeElement.tagName === 'SELECT') {
+        if (activeElement.id !== 'barcode-input') {
+            return;
+        }
+    }
+    
+    const currentTime = new Date().getTime();
+    
+    // If there's a delay greater than the timeout, reset the buffer
+    if (currentTime - lastKeyTime > BARCODE_TIMEOUT && barcodeBuffer.length > 0) {
+        barcodeBuffer = '';
+    }
+    
+    lastKeyTime = currentTime;
+    
+    // If Enter key is pressed, process the barcode
+    if (event.key === 'Enter' && barcodeBuffer.length > 0) {
+        processScannedData(barcodeBuffer);
+        barcodeBuffer = '';
+        event.preventDefault();
+    } else if (event.key !== 'Enter') {
+        // Add the character to the buffer
+        barcodeBuffer += event.key;
+    }
+});
+
+
+// Function to process the scanned data and fetch the participant details
+async function processScannedData(scannedData) {
+    console.log("Processing scanned data:", scannedData);
+    
+    // Assuming the scannedData is the bib number, we fetch the participant data based on it
+    try {
+        const response = await fetch(`/getParticipantData?bib=${scannedData}`);
+        
+        if (response.ok) {
+            const participant = await response.json();
+
+            // Check if the participant data exists and populate the form fields
+            if (participant) {
+                document.getElementById('person-first-name').value = participant.first_name || '';
+                document.getElementById('person-last-name').value = participant.last_name || '';
+                document.getElementById('person-bib').value = participant.bib || '';
+                document.getElementById('person-contact').value = participant.phone_number || '';
+                document.getElementById('person-email').value = participant.email || '';
+
+                // Also populate search field
+                document.getElementById('search-name').value = participant.bib || '';
+
+                // Show success message after data is populated
+                showScannerSuccess();
+            } else {
+                alert('No participant found for this bib number.');
+            }
+        } else {
+            console.log("Error fetching participant data.");
+            alert('Error fetching participant data.');
+        }
+    } catch (error) {
+        console.log("Error processing scanned data:", error);
+        alert('An error occurred while fetching the participant data.');
+    }
+}
+
+// Add a direct input method for testing
+function manualBarcodeEntry() {
+    const testData = "John Doe, 123-456-7890, johndoe@example.com";
+    processScannedData(testData);
+}
+// Function to show scanner success feedback
+function showScannerSuccess() {
+    const statusElem = document.querySelector('.scanner-status');
+    statusElem.textContent = "Scan Successful! Participant data loaded.";
+    statusElem.style.backgroundColor = "#4CAF50";
+    
+    // Reset back to ready state after 3 seconds
+    setTimeout(() => {
+        if (scannerActive) {
+            statusElem.textContent = "Barcode Scanner Ready - Scan Participant Barcode";
+            statusElem.style.backgroundColor = "#4CAF50";
+        }
+    }, 3000);
+}
+
+// Modified focus handling - only focus barcode input when scanner is active
+document.querySelectorAll('input, select, textarea').forEach(input => {
+    input.addEventListener('focus', function() {
+        // When a form field gets focus, temporarily pause the scanner
+        if (this.id !== 'barcode-input' && scannerActive) {
+            scannerActive = false;
+            const statusElem = document.querySelector('.scanner-status');
+            statusElem.textContent = "Barcode Scanner Paused - Filling Form";
+            statusElem.style.backgroundColor = "#FF9800";
+        }
+    });
+    
+    input.addEventListener('blur', function() {
+        // When leaving a form field, re-enable the scanner if it's not the barcode input
+        if (this.id !== 'barcode-input') {
+            scannerActive = true;
+            const statusElem = document.querySelector('.scanner-status');
+            statusElem.textContent = "Barcode Scanner Ready - Scan Participant Barcode";
+            statusElem.style.backgroundColor = "#4CAF50";
+        }
+    });
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Function to open the modal
+        function openModal() {
+            document.getElementById("userGuideModal").style.display = "block";
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById("userGuideModal").style.display = "none";
+            // Restore focus after modal is closed
+            document.getElementById('barcode-input').focus();
+        }
+
+        // Close the modal if the user clicks outside of the modal
+        window.onclick = function(event) {
+            if (event.target === document.getElementById("userGuideModal")) {
+                closeModal();
+            }
+        }
+
         // Function to search the report and display it in the form
         async function searchReport() {
             const name = document.getElementById("search-name").value;
 
             if (!name) {
-                alert("Please enter a name to search.");
+                alert("Please enter a bib number to search.");
                 return;
             }
 
@@ -167,7 +491,9 @@
                     document.getElementById('incident-date').value = report['incident-date'];
                     document.getElementById('incident-time').value = report['incident-time'];
                     document.getElementById('incident-location').value = report['incident-location'];
-                    document.getElementById('person-name').value = report['person-name'];
+                    document.getElementById('person-first-name').value = report['person-first-name'];
+                    document.getElementById('person-last-name').value = report['person-last-name'];
+                    document.getElementById('person-bib').value = report['person-bib'];
                     document.getElementById('person-contact').value = report['person-contact'];
                     document.getElementById('person-email').value = report['person-email'];
                     document.getElementById('injury-type').value = report['injury-type'];
@@ -178,11 +504,7 @@
                     document.getElementById('treatment-details').value = report['treatment-details'];
                     document.getElementById('first-aider-name').value = report['first-aider-name'];
                     document.getElementById('first-aider-contact').value = report['first-aider-contact'];
-                    //document.getElementById('first-aider-qualification').value = report['first-aider-qualification'];
-                    //document.getElementById('witness-name-1').value = report['witness-name-1'];
-                    //document.getElementById('witness-contact-1').value = report['witness-contact-1'];
-                    ///document.getElementById('witness-name-2').value = report['witness-name-2'];
-                    //document.getElementById('witness-contact-2').value = report['witness-contact-2'];
+                    document.getElementById('first-aider-qualification').value = report['first-aider-qualification'];
                     document.getElementById('additional-notes').value = report['additional-notes'];
                     document.getElementById('first-aider-signature').value = report['first-aider-signature'];
                     document.getElementById('signature-date').value = report['signature-date'];
@@ -201,115 +523,95 @@
 
         // Function to update the report
         async function updateReport() {
-    const updatedReport = {
-        'incident-date': document.getElementById('incident-date').value,
-        'incident-time': document.getElementById('incident-time').value,
-        'incident-location': document.getElementById('incident-location').value,
-        'person-name': document.getElementById('person-name').value,
-        'person-contact': document.getElementById('person-contact').value,
-        'person-email': document.getElementById('person-email').value,
-        'injury-type': document.getElementById('injury-type').value,
-        'affected-body-part': document.getElementById('affected-body-part').value,
-        'visible-symptoms': document.getElementById('visible-symptoms').value,
-        'cause': document.getElementById('cause').value,
-        'first-aid-measures': document.getElementById('first-aid-measures').value,
-        'treatment-details': document.getElementById('treatment-details').value,
-        'first-aider-name': document.getElementById('first-aider-name').value,
-        'first-aider-contact': document.getElementById('first-aider-contact').value,
-        //'first-aider-qualification': document.getElementById('first-aider-qualification').value,
-        //'witness-name-1': document.getElementById('witness-name-1').value,
-        //'witness-contact-1': document.getElementById('witness-contact-1').value,
-        //'witness-name-2': document.getElementById('witness-name-2').value,
-        //'witness-contact-2': document.getElementById('witness-contact-2').value,
-        'additional-notes': document.getElementById('additional-notes').value,
-        'first-aider-signature': document.getElementById('first-aider-signature').value,
-        'signature-date': document.getElementById('signature-date').value
-    };
+            const updatedReport = {
+                'incident-date': document.getElementById('incident-date').value,
+                'incident-time': document.getElementById('incident-time').value,
+                'incident-location': document.getElementById('incident-location').value,
+                'person-first-name': document.getElementById('person-first-name').value,
+                'person-last-name': document.getElementById('person-last-name').value,
+                'person-bib': document.getElementById('person-bib').value,
+                'person-contact': document.getElementById('person-contact').value,
+                'person-email': document.getElementById('person-email').value,
+                'injury-type': document.getElementById('injury-type').value,
+                'affected-body-part': document.getElementById('affected-body-part').value,
+                'visible-symptoms': document.getElementById('visible-symptoms').value,
+                'cause': document.getElementById('cause').value,
+                'first-aid-measures': document.getElementById('first-aid-measures').value,
+                'treatment-details': document.getElementById('treatment-details').value,
+                'first-aider-name': document.getElementById('first-aider-name').value,
+                'first-aider-contact': document.getElementById('first-aider-contact').value,
+                'first-aider-qualification': document.getElementById('first-aider-qualification').value,
+                'additional-notes': document.getElementById('additional-notes').value,
+                'first-aider-signature': document.getElementById('first-aider-signature').value,
+                'signature-date': document.getElementById('signature-date').value
+            };
 
-    const name = updatedReport['person-name'];
+            const bib = updatedReport['bib'];
 
-    // First, delete the existing report
-    try {
-        await fetch('/deleteReport', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name })
-        });
+            // First, delete the existing report
+            try {
+                await fetch('/deleteReport', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name })
+                });
 
-        // Then update with the new report
-        const response = await fetch('/updateReport', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatedReport)
-        });
+                // Then update with the new report
+                const response = await fetch('/updateReport', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedReport)
+                });
 
-        if (response.ok) {
-            alert('Report updated successfully!');
+                if (response.ok) {
+                    alert('Report updated successfully!');
 
-            // Clear form fields
-            document.getElementById('incident-date').value = '';
-            document.getElementById('incident-time').value = '';
-            document.getElementById('incident-location').value = '';
-            document.getElementById('person-name').value = '';
-            document.getElementById('person-contact').value = '';
-            document.getElementById('person-email').value = '';
-            document.getElementById('injury-type').value = '';
-            document.getElementById('affected-body-part').value = '';
-            document.getElementById('visible-symptoms').value = '';
-            document.getElementById('cause').value = '';
-            document.getElementById('first-aid-measures').value = '';
-            document.getElementById('treatment-details').value = '';
-            document.getElementById('first-aider-name').value = '';
-            document.getElementById('first-aider-contact').value = '';
-            //document.getElementById('first-aider-qualification').value = '';
-            //document.getElementById('witness-name-1').value = '';
-            //document.getElementById('witness-contact-1').value = '';
-            //document.getElementById('witness-name-2').value = '';
-            //document.getElementById('witness-contact-2').value = '';
-            document.getElementById('additional-notes').value = '';
-            document.getElementById('first-aider-signature').value = '';
-            document.getElementById('signature-date').value = '';
+                    // Clear form fields
+                    document.getElementById('report-form').reset();
 
-            // Hide the "Update" button and show the "Submit" button
-            document.querySelector('button[type="button"]').style.display = 'none';
-            document.querySelector('button[type="submit"]').style.display = 'block';
-        } else {
-            alert('Failed to update report.');
+                    // Hide the "Update" button and show the "Submit" button
+                    document.getElementById('update-button').style.display = 'none';
+                    document.getElementById('submit-button').style.display = 'block';
+                    
+                    // Reset form with current date/time
+                    updateDateTime();
+                } else {
+                    alert('Failed to update report.');
+                }
+            } catch (error) {
+                console.error('Error updating report:', error);
+                alert('Error updating the report.');
+            }
         }
-    } catch (error) {
-        console.error('Error updating report:', error);
-        alert('Error updating the report.');
-    }
-}
 
-// Automatically set current date and time in the form
-window.onload = function() {
-    updateDateTime(); // Set date and time when the page first loads
-    setInterval(updateDateTime, 60000); // Update every minute (60000 ms)
-};
+        // Automatically set current date and time in the form
+        window.onload = function() {
+            updateDateTime(); // Set date and time when the page first loads
+            setInterval(updateDateTime, 60000); // Update every minute (60000 ms)
+            
+            // Set focus to barcode input field
+            document.getElementById('barcode-input').focus();
+        };
 
-function updateDateTime() {
-    const currentDate = new Date();
+        function updateDateTime() {
+            const currentDate = new Date();
 
-    // Format the current date to YYYY-MM-DD
-    const formattedDate = currentDate.toISOString().split('T')[0]; 
+            // Format the current date to YYYY-MM-DD
+            const formattedDate = currentDate.toISOString().split('T')[0]; 
 
-    // Format the current time to HH:MM
-    const formattedTime = currentDate.toTimeString().split(' ')[0].slice(0, 5); 
+            // Format the current time to HH:MM
+            const formattedTime = currentDate.toTimeString().split(' ')[0].slice(0, 5); 
 
-    // Set the values for date and time inputs
-    document.getElementById('incident-date').value = formattedDate;
-    document.getElementById('incident-time').value = formattedTime;
-    document.getElementById('signature-date').value = formattedDate;
-}
-
-
+            // Set the values for date and time inputs
+            document.getElementById('incident-date').value = formattedDate;
+            document.getElementById('incident-time').value = formattedTime;
+            document.getElementById('signature-date').value = formattedDate;
+        }
     </script>
 
 </body>
-
 </html>

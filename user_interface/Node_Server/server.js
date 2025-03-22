@@ -156,34 +156,98 @@ app.post('/submit_password_change', (req, res) => {
   });
 });
 
-// Handle form submission
+//handle form submissions
 app.post('/submit_form', (req, res) => {
   const formData = req.body;
 
   // Read the existing data from the JSON file (if any)
   fs.readFile('reports.json', (err, data) => {
+    if (err) {
+      console.log('Error reading file:', err);
+      return res.status(500).send('Error reading data.');
+    }
+
+    let reports = [];
+    if (data.length > 0) {
+      reports = JSON.parse(data);
+    }
+
+    // Add the new form data as a report (we push the new report to the reports array)
+    reports.push(formData);
+
+    // Get the latest report
+    const latestReport = reports[reports.length - 1];
+
+    // Convert the latest report to a JSON string
+    const reportJson = JSON.stringify(latestReport);
+
+    // Create a temporary file path to save the report
+    const tempFilePath = path.join(__dirname, 'tempReport.json');
+
+    // Write the report JSON to the temporary file
+    fs.writeFileSync(tempFilePath, reportJson);
+
+    const email = latestReport['person-email'];  // Extract the email of the person
+
+    // Run the Python script and pass the temp file path and email as arguments
+    const pythonProcess = exec(`python sendEmailtoInjured.py "${tempFilePath}" "${email}"`, (err, stdout, stderr) => {
       if (err) {
-          console.log('Error reading file:', err);
+        console.error(`exec error: ${err}`);
+        return res.status(500).send('Error processing the file with the Python script');
       }
 
-      let reports = [];
-      if (data.length > 0) {
-          reports = JSON.parse(data);
+      if (stderr) {
+        console.error(`stderr: ${stderr}`);
+        return res.status(500).send('Error with the Python script');
       }
 
-      // Add new report data
-      reports.push(formData);
+      console.log('Python stdout:', stdout);
 
-      // Save the updated reports back to the JSON file
+      // After the Python script runs, save the updated reports and redirect
       fs.writeFile('reports.json', JSON.stringify(reports, null, 2), (err) => {
-          if (err) {
-              console.log('Error saving file:', err);
-              return res.status(500).send('Error saving data.');
-          }
-          return res.redirect('volunteer.html')
+        if (err) {
+          console.log('Error saving file:', err);
+          return res.status(500).send('Error saving data.');
+        }
+        return res.redirect('volunteer.html');  // Redirect after successful processing
       });
+    });
+
+    // Clean up by deleting the temporary file after the Python process completes
+    pythonProcess.on('close', (code) => {
+      console.log(`Python process exited with code ${code}`);
+      //fs.unlinkSync(tempFilePath);  // Delete the temporary file after use
+    });
   });
 });
+
+app.get('/getParticipantData', (req, res) => {
+  const bibNumber = req.query.bib;
+
+  // Read the participants.json file
+  fs.readFile(path.join(__dirname, 'participants.json'), 'utf8', (err, data) => {
+      if (err) {
+          return res.status(500).json({ error: 'Error reading participant data' });
+      }
+
+      // Parse the JSON data
+      const participants = JSON.parse(data);
+
+      // Find the participant with the given bib number
+      const participant = participants.find(p => p.bib === bibNumber);
+
+      if (participant) {
+          // Send the participant's data back as a JSON response
+          res.json(participant);
+      } else {
+          // If no participant is found with the given bib number
+          res.status(404).json({ error: 'Participant not found' });
+      }
+  });
+});
+
+
+
 
 // Route to handle file upload and call python script (account_setup.py)
 app.post('/upload', upload.single('file'), (req, res) => {
@@ -398,7 +462,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
         let match = true;
   
         // Check if 'name' is defined and contains the search query
-        if (name && report.name && !report.name.toLowerCase().includes(name.toLowerCase())) {
+        if (name && !report.name.toLowerCase().includes(name.toLowerCase())) {
           match = false;
         }
   
@@ -437,7 +501,7 @@ app.get('/searchReport', (req, res) => {
   const name = req.query.name.toLowerCase();
   const reports = getReports();
 
-  const report = reports.find(r => r['person-name'].toLowerCase().includes(name));
+  const report = reports.find(r => r['person-bib'] === name);
 
   if (report) {
       res.json(report);
@@ -503,6 +567,53 @@ function readReports() {
 
 // Route to get injury locations and their counts
 app.get('/get-injury-locations', (req, res) => {
+  const reports = readReports();  // Assuming this reads the reports file
+  const locationCounts = {};
+  const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);  // Get the date/time for 15 minutes ago
+
+  // Iterate over reports and count occurrences of each location
+  reports.forEach(report => {
+      const location = report['incident-location'];
+
+      // Combine incident-date and incident-time to create a full timestamp
+      const incidentDate = report['incident-date'];
+      const incidentTime = report['incident-time'];
+      const timestampStr = `${incidentDate}T${incidentTime}:00`; // Format it as ISO 8601
+      const reportTime = new Date(timestampStr); // Parse the timestamp string to a Date object
+
+      console.log(`Report timestamp: ${timestampStr}, Parsed Date: ${reportTime}, 15 minutes ago: ${fifteenMinutesAgo}`);
+
+      if (location) {
+          if (!locationCounts[location]) {
+              locationCounts[location] = {
+                  total: 0,
+                  last15Minutes: 0,
+              };
+          }
+
+          locationCounts[location].total++;
+
+          // Check if the report is within the last 15 minutes
+          if (reportTime >= fifteenMinutesAgo) {
+              locationCounts[location].last15Minutes++;
+          }
+      }
+  });
+
+  // Convert the location counts into an array of objects for easier display
+  const locations = Object.keys(locationCounts).map(location => ({
+      location,
+      count: locationCounts[location].total,
+      countInLast15Minutes: locationCounts[location].last15Minutes,
+  }));
+
+  res.json(locations); // Send locations and their counts as JSON
+});
+
+
+/*
+// Route to get injury locations and their counts
+app.get('/get-injury-locations', (req, res) => {
   const reports = readReports();
   const locationCounts = {};
 
@@ -526,7 +637,7 @@ app.get('/get-injury-locations', (req, res) => {
 
   res.json(locations); // Send locations and their counts as JSON
 });
-
+*/
 // Update a report
 app.put('/updateReport', (req, res) => {
   const updatedReport = req.body;
@@ -546,6 +657,77 @@ app.put('/updateReport', (req, res) => {
   saveReports(reports);
   res.json({ message: 'Report updated successfully' });
 });
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper function to get the current date in YYYY-MM-DD format
+function getCurrentDate() {
+  const today = new Date();
+  return today.toISOString().split('T')[0]; // YYYY-MM-DD format
+}
+
+// Function to convert the incident time (HH:MM) into a Date object
+function convertIncidentTimeToDate(incidentTime, currentDate) {
+  const [hours, minutes] = incidentTime.split(':').map(Number);
+  return new Date(`${currentDate}T${incidentTime}:00Z`);
+}
+
+// Read reports from the reports.json file
+function loadReports() {
+  const reportsPath = path.join(__dirname, 'reports.json');
+  if (!fs.existsSync(reportsPath)) {
+    console.error('reports.json file not found');
+    return [];
+  }
+  const data = fs.readFileSync(reportsPath, 'utf-8');
+  return JSON.parse(data);
+}
+
+// Endpoint to get injury locations and the number of reports in the last 15 minutes
+app.get('/get-injury-locations', (req, res) => {
+  const reports = loadReports(); // Load the reports from the JSON file
+  const currentDate = getCurrentDate(); // Get today's date
+  const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000); // 15 minutes ago
+
+  // Group reports by location (incident-location field)
+  const locationReports = reports.reduce((acc, report) => {
+    const location = report['incident-location']; // Correct field is 'incident-location'
+    if (!acc[location]) acc[location] = [];
+    acc[location].push(report);
+    return acc;
+  }, {});
+
+  // Count total reports and reports in the last 15 minutes for each location
+  const locationData = Object.keys(locationReports).map(location => {
+    const locationData = locationReports[location];
+    
+    // Count total reports for the location
+    const totalReports = locationData.length;
+
+    // Filter reports in the last 15 minutes for the location
+    const reportsInLast15Minutes = locationData.filter(report => {
+      const reportTime = convertIncidentTimeToDate(report['incident-time'], currentDate);
+      return reportTime > fifteenMinutesAgo; // Check if the report is within the last 15 minutes
+    });
+
+    // Count of reports in the last 15 minutes
+    const countInLast15Minutes = reportsInLast15Minutes.length;
+
+    console.log({
+      location,
+      totalReports,
+      countInLast15Minutes,
+    });
+
+    return {
+      location: location,
+      totalReports: totalReports,
+      countInLast15Minutes: countInLast15Minutes,
+    };
+  });
+
+  // Send back the data as JSON
+  res.json(locationData);
+});
+
 
 // Start the server
 app.listen(port, () => {

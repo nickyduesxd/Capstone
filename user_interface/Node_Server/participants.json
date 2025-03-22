@@ -1,0 +1,16 @@
+[
+    {
+        "first_name": "John",
+        "last_name": "Doe",
+        "bib": "2025",
+        "phone_number": "123-456-7890",
+        "email": "john.doe@gmail.com"
+    },
+    {
+        "first_name": "Nicholas",
+        "last_name": "Zayfman",
+        "bib": "1717",
+        "phone_number": "123-456-7890",
+        "email": "ndzayfman@gmail.com"
+    }
+]
