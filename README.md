@@ -14,12 +14,22 @@ We are tasked with designing a new system to replace the current one.
 This project is complicated given the high attendance for this event as well as the location (Washington D.C.) where
 security is hightened and surrounds sensitive areas such as the Pentagon and the route is in a city.
 
+## How to navigate this Github Repository
+[Guide](./guide)
+- Contains a set up guide for administrators and developers. Steps on how to set up the LORAWAN network, hardware to purchase, and how to set up the web server and run the application.
+[User Interface](./user_interface)
+
+[Research Paper](./research_paper)
+- The research_paper folder has our a pdf version of our paper that contains our proposed solution.
+[Capstone Poster](./poster)
+- Contains our Capstone Poster and Presenation Slide deck for Capstone Day.
+[Capstone Proposal](./proposal)
+
+[Licenses](./guide/licenses)
+- The licenses has information on the libraries and packages we used as well as their respective licenses.
+
 ## Current Steps
-- Editing Research Paper draft
-- Working on UI (Development- working on code and writing tests)
-- Working on Network Set Up.
-- Working on documentation
-- Working on recorded demo
+- None (Project is finished)
 
 ## What we have accomplished so far.
 - Completed Literature Review
@@ -29,14 +39,7 @@ security is hightened and surrounds sensitive areas such as the Pentagon and the
 - Presented Capstone Proposal to both Computer Science and Cyber Operations sections
 - Completed Movement Order to G6 (responsible for communications for MCM) in Quantico on 10FEB25.
 - Completed Presentation Board
-
-## How to navigate this Github Repository
-- The developer_guide has
-- The research_paper folder has our a pdf version of our paper.
-- The poster folder has our Capstone Poster.
-- The user_interface folder has our website.
-- The node has our network.
-- The sprint_logs has the documentation of our scrum process.
-- The licenses has information on the libraries and packages we used as well as their respective licenses.
-- The proposal has the approved capstone proposal
-- The charter has our group agreement
+- Completed Basic UI with Barcode Scanner and LORAWAN Network Implementation
+- Conducted experiments with LORAWAN Network and recorded results.
+- Completed Research Paper and final Poster
+- Completed Slideshow Presenation for Capstone Day
