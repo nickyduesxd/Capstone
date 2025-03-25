@@ -4,12 +4,12 @@
 ### participant_setup.py
 Converts Participant Information stored in CSV file into a JSON file.
 To run: python ./participant_setup.py <participants_info.csv>
-### [account_setup.py](/account_setup.py)
+### [account_setup.py](/user_interface/account_setup.py)
 Converts users.csv file to json file then proceeds to make user accounts.
 After creation, each user is sent an email with their made username and a "Strong Password"
 which they will change after they first log in.
 To run: python ./account_setup.py  <users_info.csv>
-### [sendEmailtoInjured.py](/sendEmailtoInjured.py)
+### [sendEmailtoInjured.py](/user_interface/sendEmailtoInjured.py)
 Sends an email of the report to the participant with the injury.
 It is called by the server.js process after it recieves a report.
 ## NodeJS File
