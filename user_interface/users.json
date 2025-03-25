@@ -1,20 +1,38 @@
 [
-    {
-        "first_name": "Nicholas",
-        "last_name": "Zayfman",
-        "username": "NZayfman",
-        "role": "Administrator",
-        "email": "m257050@usna.edu",
-        "password": "$2b$12$WBZ64y9hj8zk3/yxUK/niu83AKEL8XctbZS6SHwRaJgIxDtskVczW",
-        "new_password_set": false
-    },
-    {
-        "first_name": "Zeyad",
-        "last_name": "Elgendy",
-        "username": "ZElgendy",
-        "role": "Administrator",
-        "email": "m251587@usna.edu",
-        "password": "$2b$12$k9FVqAnRi8TkHLXw2xggvu1g81e8xdtlphol7f7zjzps0AuQ1nL0S",
-        "new_password_set": false
-    }
+  {
+    "first_name": "Nicholas",
+    "last_name": "Zayfman",
+    "username": "NZayfman",
+    "role": "Administrator",
+    "email": "m257050@usna.edu",
+    "password": "$2b$12$Cr/7aaxfyPU4.ImSkue7futzrpPw9CnzKF3yJfSPtAHGKQw4wmWD.",
+    "new_password_set": false
+  },
+  {
+    "first_name": "Zeyad",
+    "last_name": "Elgendy",
+    "username": "ZElgendy",
+    "role": "Administrator",
+    "email": "m251587@usna.edu",
+    "password": "$2b$12$TZaCdmg49Cm9nJGxObRhKuFlcwLopHBVsm1U3.SIaUa9XGs.0c1Tm",
+    "new_password_set": false
+  },
+  {
+    "first_name": "Root",
+    "last_name": "Root",
+    "username": "RRoot",
+    "role": "Administrator",
+    "email": "m257050@usna.edu",
+    "password": "$2a$10$RBdV1DCIEYJTZetO8BauEOIU5mJlVXpPjiudyLzE6pzueIOAhds.S",
+    "new_password_set": true
+  },
+  {
+    "first_name": "test",
+    "last_name": "volunteer",
+    "username": "tvolunteer",
+    "role": "Volunteer",
+    "email": "m257050@usna.edu",
+    "password": "$2a$10$c6jsaWlPvVrWDcXcNSG1N.5.RypQYbafoqV.NL3/tTyiJiGAW/H5y",
+    "new_password_set": true
+  }
 ]

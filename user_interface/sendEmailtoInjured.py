@@ -9,6 +9,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import sys
 
+# email we made for the capstone
 # sender email : mcm.communications.capstone1@gmail.com
 # sender password : capstone
 
@@ -20,7 +21,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
 
-# Email credentials
+# Email credentials - google API - allows us to log on through a script
 sender_email = "mcm.communications.capstone1@gmail.com"
 sender_password = "mcem npen zcpd nqkk"
 
@@ -62,7 +63,7 @@ try:
 except Exception as e:
     print(f"Error: {e}")
 
-# Clean up the temporary report file after use
+# remove temp report file after use
 if os.path.exists(report_file_path):
     os.remove(report_file_path)
     print(f"Temporary report file {report_file_path} has been deleted.")

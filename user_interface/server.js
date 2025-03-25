@@ -7,7 +7,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
-const axios = require('axios');  // For making HTTP requests to download the logo
+const axios = require('axios');  
 const { PDFDocument, rgb } = require('pdf-lib');
 const fs = require('fs');
 const path = require('path');
@@ -33,32 +33,32 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }); 
 
 
-// Middleware to parse form data
+// middleware to parse form data
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Path to the JSON file where user data will be stored
+// path to the JSON file where user data will be stored
 const userDataFilePath = path.join(__dirname, 'users.json');
 
-// Serve static files (like HTML)
+// serve static files
 app.use(express.static('public'));
 
-app.use(express.json()); // This will allow you to parse JSON request bodies
+app.use(express.json());
 
-// Route to display login page
+// route to display login page
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'volunteer.html'));
 });
 
-// Redirect the root URL to the desired page
+// redirect the root URL to desired page
 app.get('/', (req, res) => {
   res.redirect('/login');
 });
 
-// Route to handle login form submission
+// route to handle login form submission
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
-  // Read user data from the JSON file
+  // read user data from the JSON file
   fs.readFile(userDataFilePath, 'utf8', (err, data) => {
     if (err) {
       return res.status(500).send('Error reading user data file');
@@ -66,16 +66,16 @@ app.post('/login', (req, res) => {
 
     let users = [];
     try {
-      users = JSON.parse(data);  // Parse the JSON data into a JavaScript array
+      users = JSON.parse(data);  // Parse the JSON data into a javaScript array
     } catch (parseError) {
       return res.status(500).send('Error parsing user data file');
     }
 
-    // Find the user by username
+    // find the user by username
     const user = users.find((u) => u.username === username);
 
     if (user) {
-      // Compare the hashed password with the stored hash
+      // compare the hashed password with the stored hash
       bcrypt.compare(password, user.password, (err, result) => {
         if (result && user.new_password_set == false){
           res.redirect('/newlogin.html') //Page to set new password
@@ -86,20 +86,15 @@ app.post('/login', (req, res) => {
           // check user role and redirect accordingly
           if (user.role === 'Administrator')
           {
-
             res.redirect('/administrator.html');
-
           }
-
           else if (user.role === 'Volunteer')
           {
             res.redirect('/volunteer.html');
           }
-
           else {
             res.status(403).send('Unauthorized role')
           }
-          
         } else {
           res.redirect('/login.html');
         }
@@ -114,18 +109,16 @@ app.post('/login', (req, res) => {
 //Handle the new password
 app.post('/submit_password_change', (req, res) => {
   const { username, old_password, new_password, confirm_new_password } = req.body;
-
-  // Example validation logic (you can replace this with real validation)
+  // validation
   if (new_password !== confirm_new_password) {
     return res.status(400).send('Passwords do not match!');
   }
 
-  // Read user data from the JSON file
+  // read user data from the JSON file
   fs.readFile(userDataFilePath, 'utf8', (err, data) => {
     if (err) {
       return res.status(500).send('Error reading user data file');
     }
-
     let users = [];
     try {
       users = JSON.parse(data);  // Parse the JSON data into a JavaScript array
@@ -135,8 +128,6 @@ app.post('/submit_password_change', (req, res) => {
 
     // Find the user by username
     const user = users.find((u) => u.username === username);
-  // Simulate checking the old password (In real scenarios, you would check with the database)
-
     bcrypt.compare(old_password, user.password, (err, result) => {
       if (result){
         user.new_password_set = true
@@ -166,12 +157,10 @@ app.post('/submit_form', (req, res) => {
       console.log('Error reading file:', err);
       return res.status(500).send('Error reading data.');
     }
-
     let reports = [];
     if (data.length > 0) {
       reports = JSON.parse(data);
     }
-
     // Add the new form data as a report (we push the new report to the reports array)
     reports.push(formData);
 
@@ -186,23 +175,18 @@ app.post('/submit_form', (req, res) => {
 
     // Write the report JSON to the temporary file
     fs.writeFileSync(tempFilePath, reportJson);
-
     const email = latestReport['person-email'];  // Extract the email of the person
-
     // Run the Python script and pass the temp file path and email as arguments
     const pythonProcess = exec(`python sendEmailtoInjured.py "${tempFilePath}" "${email}"`, (err, stdout, stderr) => {
       if (err) {
         console.error(`exec error: ${err}`);
         return res.status(500).send('Error processing the file with the Python script');
       }
-
       if (stderr) {
         console.error(`stderr: ${stderr}`);
         return res.status(500).send('Error with the Python script');
       }
-
       console.log('Python stdout:', stdout);
-
       // After the Python script runs, save the updated reports and redirect
       fs.writeFile('reports.json', JSON.stringify(reports, null, 2), (err) => {
         if (err) {
@@ -216,26 +200,22 @@ app.post('/submit_form', (req, res) => {
     // Clean up by deleting the temporary file after the Python process completes
     pythonProcess.on('close', (code) => {
       console.log(`Python process exited with code ${code}`);
-      //fs.unlinkSync(tempFilePath);  // Delete the temporary file after use
+      //fs.unlinkSync(tempFilePath);  // Delete the temp file after use
     });
   });
 });
 
 app.get('/getParticipantData', (req, res) => {
   const bibNumber = req.query.bib;
-
   // Read the participants.json file
   fs.readFile(path.join(__dirname, 'participants.json'), 'utf8', (err, data) => {
       if (err) {
           return res.status(500).json({ error: 'Error reading participant data' });
       }
-
       // Parse the JSON data
       const participants = JSON.parse(data);
-
       // Find the participant with the given bib number
       const participant = participants.find(p => p.bib === bibNumber);
-
       if (participant) {
           // Send the participant's data back as a JSON response
           res.json(participant);
@@ -246,34 +226,24 @@ app.get('/getParticipantData', (req, res) => {
   });
 });
 
-
-
-
 // Route to handle file upload and call python script (account_setup.py)
 app.post('/upload', upload.single('file'), (req, res) => {
   if (!req.file) {
     console.log('No file uploaded'); // Log if no file is uploaded
     return res.status(400).send('No file uploaded');
   }
-
   console.log('Uploaded file details:', req.file); // Log file details
   const filePath = path.join(__dirname, 'uploads', req.file.filename);
   console.log('File path:', filePath); // Log file path
-
   fs.chmod(filePath, 0o444, (err) => {
     if (err) {
       console.error('Error changing file permissions:', err);
       return res.status(500).send('Error changing file permissions');
     }
-
     console.log(`Permissions set to read-only for: ${filePath}`);
   });
-
-
   const normalizedFilePath = path.normalize(filePath);
   console.log('Normalized file path:', normalizedFilePath); // Log normalized path
-
-
 
   // Call the Python script to convert CSV to JSON
   csv_file = filePath;
@@ -283,15 +253,12 @@ app.post('/upload', upload.single('file'), (req, res) => {
         console.error(`exec error: ${err}`);
         return res.status(500).send('Error processing the file with the Python script');
       }
-  
       if (stderr) {
         console.error(`stderr: ${stderr}`);
         return res.status(500).send('Error with the Python script');
       }
-  
       console.log('Python stdout:', stdout);
-
-      // Optionally, delete the file after processing
+      // delete the file after processing
       fs.unlink(filePath, (err) => {
         if (err) {
           console.log('Error deleting file:', err);
@@ -316,7 +283,6 @@ app.post('/upload', upload.single('file'), (req, res) => {
       if (!reportsData || !Array.isArray(reportsData)) {
         return res.status(500).send('Invalid data format in reports.json');
       }
-  
       // Download the logo image
       const logoUrl = 'https://upload.wikimedia.org/wikipedia/en/1/14/Marine_Corps_Marathon_%28logo%29.jpg';
       const logoResponse = await axios.get(logoUrl, { responseType: 'arraybuffer' });
@@ -338,43 +304,42 @@ app.post('/upload', upload.single('file'), (req, res) => {
         // Draw logo at top-right corner
         page.drawImage(logoImage, {
           x: (width -logoWidth) / 2,
-          //x: width - logoWidth - 20, // 20px from the right
           y: height - logoHeight - 20, // 20px from the top
           width: logoWidth,
           height: logoHeight,
         });
   
-        // Set font and text properties
+        // set font and text properties
         const font = pdfDoc.embedStandardFont('Helvetica');
         let yPosition = height - logoHeight - 60;  // Starting position for first report
   
-        // Draw a box around the text
+        // draw a box around the text
         const boxWidth = 560;  // Box width
         const boxHeight = 475; // Box height
         const boxX = 20;
-        const boxY = yPosition - 500;  // Set y position of the box
+        const boxY = yPosition - 500;  // set y position of the box
   
-        // Draw the rectangle around the text
+        // draw the rectangle around the text
         page.drawRectangle({
           x: boxX,
           y: boxY,
           width: boxWidth,
           height: boxHeight,
-          borderColor: rgb(0, 0, 0), // Black border color
-          borderWidth: 1,            // Border width
-          color: rgb(1, 1, 1),       // White fill color
+          borderColor: rgb(0, 0, 0),
+          borderWidth: 1,            
+          color: rgb(1, 1, 1),       
         });
   
-        // Add report title inside the box
+        // add report title inside the box
         page.drawText(`Incident Report #${index + 1}`, {
-          x: boxX + 10, // Padding inside the box
+          x: boxX + 10, //padding inside the box
           y: boxY + boxHeight - 20,
           size: 14,
           font,
           color: rgb(0, 0, 0),
         });
   
-        // Add report details inside the box
+        // add report inside the box
         let textYPosition = boxY + boxHeight - 40;
         Object.keys(report).forEach((key) => {
           const value = report[key];
@@ -388,8 +353,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
           });
           textYPosition -= 20; // Move down for next line
         });
-  
-        // Draw a line underneath the box with the label "Sensitive Data, PII"
+
         const lineStartX = boxX;
         const lineEndX = boxX + boxWidth;
         const lineY = textYPosition - 10;  // Position for the line
@@ -398,29 +362,29 @@ app.post('/upload', upload.single('file'), (req, res) => {
         page.drawLine({
           start: { x: lineStartX, y: lineY },
           end: { x: lineEndX, y: lineY },
-          color: rgb(0, 0, 0),   // Black color
-          thickness: 1,           // Line thickness
+          color: rgb(0, 0, 0),  
+          thickness: 1,          
         });
   
         // Add label "Sensitive Data, PII" under the line
         page.drawText('Sensitive Data, PII', {
-          x: boxX + 10, // Padding
-          y: lineY - 15, // Position under the line
+          x: boxX + 10, 
+          y: lineY - 15,
           size: 10,
           font,
           color: rgb(0, 0, 0),
         });
   
-        // If space runs out, add a new page
+        // add a new page if page runs out
         if (textYPosition < 40) {
           textYPosition = height - 40;
         }
       });
   
-      // Serialize the PDF document to bytes
+      // serialize the PDF document to bytes
       const pdfBytes = await pdfDoc.save();
   
-      // Save PDF to file (for debugging)
+      // save PDF to file (and prints for debugging)
       const outputPath = path.join(__dirname, 'incident_reports.pdf');
       fs.writeFileSync(outputPath, pdfBytes);
       console.log(`PDF saved to: ${outputPath}`);
@@ -440,7 +404,6 @@ app.post('/upload', upload.single('file'), (req, res) => {
   
   
 // Route to handle file upload and call python script (account_setup.py)
-//app.post('/search_form', upload.single('file'), (req, res) => {}
   app.get('/search_form', (req, res) => {
     const { 'search-name': name, 'search-injury-type': injuryType } = req.query;
   
@@ -456,24 +419,19 @@ app.post('/upload', upload.single('file'), (req, res) => {
       } catch (parseError) {
         return res.status(500).send('Error parsing the data file');
       }
-  
       // Filter the reports based on search criteria
       let results = reports.filter(report => {
         let match = true;
-  
         // Check if 'name' is defined and contains the search query
         if (name && !report.name.toLowerCase().includes(name.toLowerCase())) {
           match = false;
         }
-  
         // Check if 'injuryType' is defined and contains the search query
         if (injuryType && report.injuryType && !report.injuryType.toLowerCase().includes(injuryType.toLowerCase())) {
           match = false;
         }
-  
         return match;
       });
-  
       // Respond with filtered results
       res.json(results);
     });
@@ -483,12 +441,10 @@ app.get('/reports', (req, res) => {
   res.sendFile(path.join(__dirname, 'reports.json'));
 });  
 
-
 function getReports() {
   const filePath = path.join(__dirname, 'reports.json');
   return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 }
-
 
 // Save updated reports to the JSON file
 function saveReports(reports) {
@@ -500,7 +456,6 @@ function saveReports(reports) {
 app.get('/searchReport', (req, res) => {
   const name = req.query.name.toLowerCase();
   const reports = getReports();
-
   const report = reports.find(r => r['person-bib'] === name);
 
   if (report) {
@@ -544,9 +499,7 @@ app.delete('/deleteReport', (req, res) => {
       if (index === -1) {
           return res.status(404).json({ error: "Report not found" });
       }
-
       reports.splice(index, 1);
-
       fs.writeFile(reportFilePath, JSON.stringify(reports, null, 2), 'utf-8', (writeError) => {
           if (writeError) {
               console.error("Error writing the file:", writeError);
@@ -580,9 +533,7 @@ app.get('/get-injury-locations', (req, res) => {
       const incidentTime = report['incident-time'];
       const timestampStr = `${incidentDate}T${incidentTime}:00`; // Format it as ISO 8601
       const reportTime = new Date(timestampStr); // Parse the timestamp string to a Date object
-
       console.log(`Report timestamp: ${timestampStr}, Parsed Date: ${reportTime}, 15 minutes ago: ${fifteenMinutesAgo}`);
-
       if (location) {
           if (!locationCounts[location]) {
               locationCounts[location] = {
@@ -610,34 +561,6 @@ app.get('/get-injury-locations', (req, res) => {
   res.json(locations); // Send locations and their counts as JSON
 });
 
-
-/*
-// Route to get injury locations and their counts
-app.get('/get-injury-locations', (req, res) => {
-  const reports = readReports();
-  const locationCounts = {};
-
-  // Iterate over reports and count occurrences of each location
-  reports.forEach(report => {
-      const location = report['incident-location'];
-      if (location) {
-          if (locationCounts[location]) {
-              locationCounts[location]++;
-          } else {
-              locationCounts[location] = 1;
-          }
-      }
-  });
-
-  // Convert the location counts into an array of objects for easier display
-  const locations = Object.keys(locationCounts).map(location => ({
-      location,
-      count: locationCounts[location]
-  }));
-
-  res.json(locations); // Send locations and their counts as JSON
-});
-*/
 // Update a report
 app.put('/updateReport', (req, res) => {
   const updatedReport = req.body;
@@ -649,15 +572,12 @@ app.put('/updateReport', (req, res) => {
   if (reportIndex === -1) {
       return res.status(404).json({ message: 'Report not found' });
   }
-
   // Replace the old report with the updated one
   reports[reportIndex] = updatedReport;
-
   // Save the updated reports
   saveReports(reports);
   res.json({ message: 'Report updated successfully' });
 });
-////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper function to get the current date in YYYY-MM-DD format
 function getCurrentDate() {
   const today = new Date();
@@ -707,10 +627,8 @@ app.get('/get-injury-locations', (req, res) => {
       const reportTime = convertIncidentTimeToDate(report['incident-time'], currentDate);
       return reportTime > fifteenMinutesAgo; // Check if the report is within the last 15 minutes
     });
-
     // Count of reports in the last 15 minutes
     const countInLast15Minutes = reportsInLast15Minutes.length;
-
     console.log({
       location,
       totalReports,
