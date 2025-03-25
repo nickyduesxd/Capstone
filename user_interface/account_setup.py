@@ -1,3 +1,4 @@
+# Import packages
 import csv
 import json
 import random
@@ -9,6 +10,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import sys
 
+# Made an email address with gmail for demo
 # sender email : mcm.communications.capstone1@gmail.com
 # sender password : capstone
 
@@ -18,16 +20,14 @@ def send_email(sender_email, sender_password, receiver_email, subject, body):
     smtp_server = "smtp.gmail.com"
     smtp_port = 465  # SSL port
 
-    # Create a secure SSL context
     context = ssl.create_default_context()
 
-    # Create the email message
+    # create the message
     message = MIMEMultipart()
     message["From"] = sender_email
     message["To"] = receiver_email
     message["Subject"] = subject
 
-    # Attach the body with the email
     message.attach(MIMEText(body, "plain"))
 
     try:
@@ -46,18 +46,17 @@ def send_email(sender_email, sender_password, receiver_email, subject, body):
 def generate_strong_password(length=12):
     if length < 12:
         print("For better security, a password length of 12 or more is recommended.")
-        length = 12  # Set a minimum length for the password
+        length = 12  # length for psswd
     
-    # Define the possible character sets
+    # define character set
     lowercase = string.ascii_lowercase
     uppercase = string.ascii_uppercase
     digits = string.digits
     punctuation = string.punctuation
 
-    # Combine all possible characters
     all_characters = lowercase + uppercase + digits + punctuation
 
-    # Generate the password
+    # generate password
     password = [
         random.choice(lowercase),
         random.choice(uppercase),
@@ -112,8 +111,6 @@ def main(csv_file, json_file):
         json.dump(data, jsonf, indent=4)
     return 1
 
-# actually not autmoated test
-# csv_to_json('data_sample_test.csv', 'users.json')
 if __name__ == "__main__":
     # Get the file path from command-line arguments
     csv_file_path = sys.argv[1]

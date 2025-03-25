@@ -26,12 +26,19 @@ sudo apt-get update
 
 sudo apt-get install -y python3 python3-pip
 
-pip3 install bcrypt
-pip3 install smtplib
-pip3 install ssl
-pip3 install email
-pip3 install csv
-pip3 install json
+pip install bcrypt
+pip install smtplib
+pip install ssl
+pip install email
+pip install csv
+pip install json
 pip install python-barcode
 pip install Pillow
-
+pip install os
+pip install barcode
+pip install subprocess
+pip install platform
+pip install json
+pip install random
+pip install sting
+pip install sys

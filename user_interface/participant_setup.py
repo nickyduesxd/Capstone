@@ -1,3 +1,4 @@
+# import packages
 import csv
 import json
 import random
@@ -34,8 +35,6 @@ def main(csv_file, json_file):
         json.dump(data, jsonf, indent=4)
     return 1
 
-# actually not autmoated test
-# csv_to_json('data_sample_test.csv', 'users.json')
 if __name__ == "__main__":
     # Get the file path from command-line arguments
     csv_file_path = sys.argv[1]
