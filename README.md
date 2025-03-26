@@ -26,7 +26,7 @@ security is hightened and surrounds sensitive areas such as the Pentagon and the
 - Contains our Capstone Poster and Presenation Slide deck for Capstone Day.
 ### [Capstone Proposal](./proposal)
 - Contains proposal paperwork for the Capstone.
-### [Licenses](./guide/licenses)
+### [Licenses](./guide/guide.licenses.md)
 - The licenses has information on the libraries and packages we used as well as their respective licenses.
 
 ## Current Steps

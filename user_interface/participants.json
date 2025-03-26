@@ -12,5 +12,12 @@
         "bib": "1717",
         "phone_number": "123-456-7890",
         "email": "ndzayfman@gmail.com"
+    },
+    {
+        "first_name": "John",
+        "last_name": "Runner",
+        "bib": "1234",
+        "phone_number": "555-123-4567",
+        "email": "john.runner@example.com"
     }
 ]

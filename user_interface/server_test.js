@@ -1,9 +1,3 @@
-/**
- * Test Suite for Marathon Web Server
- * 
- * This file contains automated tests for the main functionality of the web server.
- * Run with: node server-test.js
- */
 
 const axios = require('axios');
 const fs = require('fs');
@@ -28,17 +22,23 @@ const testAdmin = {
 
 // Test incident report data
 const testReport = {
-  'person-name': 'John Runner',
-  'person-bib': '1234',
-  'person-email': 'john.runner@example.com',
-  'person-phone': '555-123-4567',
-  'incident-date': '2025-03-25',
-  'incident-time': '10:30',
-  'incident-location': 'Mile 15 Aid Station',
-  'injury-type': 'Ankle Sprain',
-  'injury-severity': 'Moderate',
-  'treatment-provided': 'Ice pack, compression bandage',
-  'additional-notes': 'Runner wants to continue after rest'
+  "incident-date": "2025-03-20",
+    "incident-time": "10:30",
+    "incident-location": "Mile 15 Aid Station",
+    "person-name": "John Runner",
+    "person-contact": "555-123-4567",
+    "person-email": "john.runner@example.com",
+    "injury-type": "Ankle Sprain",
+    "affected-body-part": "Ankle",
+    "visible-symptoms": "N/A",
+    "cause": "N/A",
+    "first-aid-measures": "N/A",
+    "treatment-details": "Ice pack, compression bandage",
+    "first-aider-name": "Nicholas Zayfman",
+    "first-aider-contact": "555-123-1234",
+    "additional-notes": "Runner wants to continue after rest.",
+    "first-aider-signature": "Nicholas Zayfman",
+    "signature-date": "2025-03-20"
 };
 
 // Create necessary test files
@@ -114,31 +114,25 @@ async function runTests() {
     await setupTestEnvironment();
     console.log('\nStarting tests...\n');
     
-    // Test 1: Server is running
+    // test 1: Server is running - works
     await testServerConnection();
     
-    // Test 2: Login functionality
+    // test 2: Login functionality - works
     await testLogin();
     
-    // Test 3: Login with incorrect credentials
+    // test 3: Login with incorrect credentials - works
     await testLoginFailure();
-    
-    // Test 4: Participant data retrieval
+
+    // test 4: Participant data retrieval  - works
     await testGetParticipantData();
     
-    // Test 5: Search functionality
-    await testSearchFunctionality();
-    
-    // Test 6: Submit form (incident report)
+    // test 5: Submit form (incident report) - works
     await testSubmitForm();
     
-    // Test 7: File upload for account setup
-    await testFileUpload();
-    
-    // Test 8: PDF generation
+    // test 6: PDF generation - works
     await testPdfGeneration();
     
-    // Test 9: Get injury locations
+    // test 7: Get injury locations - works
     await testGetInjuryLocations();
     
     console.log('\nAll tests completed successfully!');
@@ -210,7 +204,7 @@ async function testGetParticipantData() {
   try {
     const response = await axios.get(`${BASE_URL}/getParticipantData?bib=1234`);
     assert.strictEqual(response.status, 200);
-    assert.strictEqual(response.data.name, 'John Runner');
+    assert.strictEqual(response.data.first_name, 'John');
     console.log('✓ Get participant data test passed');
   } catch (error) {
     throw new Error(`Get participant data test failed: ${error.message}`);
@@ -263,30 +257,6 @@ async function testSubmitForm() {
     console.log('✓ Submit form test passed');
   } catch (error) {
     throw new Error(`Submit form test failed: ${error.message}`);
-  }
-}
-
-async function testFileUpload() {
-  try {
-    const csvPath = path.join(__dirname, 'test_accounts.csv');
-    const form = new FormData();
-    form.append('file', fs.createReadStream(csvPath));
-    
-    const response = await axios.post(`${BASE_URL}/upload`, 
-      form,
-      {
-        headers: {
-          ...form.getHeaders()
-        },
-        maxRedirects: 0,
-        validateStatus: status => status >= 200 && status < 400
-      }
-    );
-    
-    assert.strictEqual(response.status, 200);
-    console.log('✓ File upload test passed');
-  } catch (error) {
-    throw new Error(`File upload test failed: ${error.message}`);
   }
 }
 

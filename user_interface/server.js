@@ -451,7 +451,7 @@ function saveReports(reports) {
   const filePath = path.join(__dirname, 'reports.json');
   fs.writeFileSync(filePath, JSON.stringify(reports, null, 2));
 }
-
+/*
 // Search for a report by name
 app.get('/searchReport', (req, res) => {
   const name = req.query.name.toLowerCase();
@@ -464,6 +464,7 @@ app.get('/searchReport', (req, res) => {
       res.status(404).json({ message: 'Report not found' });
   }
 });
+*/
 app.delete('/deleteReport', (req, res) => {
   const { name } = req.body; // Make sure this value is passed in the body
 

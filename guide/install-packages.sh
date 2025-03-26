@@ -1,50 +1,40 @@
 #!/bin/bash
 
 # This script will install all the necessary packages in order to run the webserver.
+set -e
 
-echo "Installing Node.js and npm..."
+echo "===== Installing Node.js and npm ====="
+sudo apt update
 sudo apt install -y nodejs npm
 
-echo "Installing required Node.js packages..."
-npm install express bcryptjs body-parser axios pdf-lib multer
+echo "===== Installing required Node.js packages ====="
+npm install express bcryptjs body-parser axios pdf-lib fs path multer child_process
 
-echo "All packages installed successfully!"
+# additional packages needed for testing
+npm install form-data assert
 
-echo "Installing Python and necessary packages..."
+echo "===== Installing Python and necessary packages ====="
 sudo apt install -y python3 python3-pip
 pip3 install --upgrade pip
 
-echo "Installing Python dependencies..."
+echo "===== Installing Python dependencies ====="
 
-sudo apt-get update
 
-sudo apt-get install -y python3 python3-pip
+# third-party modules that need to be installed
+pip3 install bcrypt
+pip3 install python-barcode
+pip3 install Pillow
+pip3 install secure-smtplib
 
-pip install bcrypt
-pip install smtplib
-pip install ssl
-pip install email
-pip install csv
-pip install json
-pip install python-barcode
-pip install Pillow
-pip install os
-pip install barcode
-pip install subprocess
-pip install platform
-pip install json
-pip install random
-pip install sting
-pip install sys
+# create required directories
+echo "===== Creating required directories ====="
+mkdir -p uploads
 
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const bodyParser = require('body-parser');
-const axios = require('axios');  
-const { PDFDocument, rgb } = require('pdf-lib');
-const fs = require('fs');
-const path = require('path');
-const multer = require('multer');
-const { exec } = require('child_process');
-const app = express();
-const port = 3017;
+# create empty JSON files if they don't exist
+echo "===== Setting up initial JSON files ====="
+[ -f users.json ] || echo "[]" > users.json
+[ -f reports.json ] || echo "[]" > reports.json
+[ -f participants.json ] || echo "[]" > participants.json
+
+echo "===== All packages installed successfully! ====="
+echo "You can now start the server with: node server.js"

@@ -5,7 +5,7 @@
     "username": "NZayfman",
     "role": "Administrator",
     "email": "m257050@usna.edu",
-    "password": "$2b$12$Cr/7aaxfyPU4.ImSkue7futzrpPw9CnzKF3yJfSPtAHGKQw4wmWD.",
+    "password": "$2b$12$7uEnYPNDfqltrQeLCbeUO.YvUSzEYCTYIsGhYrofcKS9pvNxbzaGW",
     "new_password_set": false
   },
   {
@@ -14,7 +14,7 @@
     "username": "ZElgendy",
     "role": "Administrator",
     "email": "m251587@usna.edu",
-    "password": "$2b$12$TZaCdmg49Cm9nJGxObRhKuFlcwLopHBVsm1U3.SIaUa9XGs.0c1Tm",
+    "password": "$2b$12$Jj/UXoY8hrks8OexjXaO/uPcYp8dU8ZS1k42ntUpXTbeVf8mYH5GG",
     "new_password_set": false
   },
   {
@@ -23,7 +23,7 @@
     "username": "RRoot",
     "role": "Administrator",
     "email": "m257050@usna.edu",
-    "password": "$2a$10$RBdV1DCIEYJTZetO8BauEOIU5mJlVXpPjiudyLzE6pzueIOAhds.S",
+    "password": "$2a$10$OpbwYVbQPBERNqqiUY3ypOZONALJFkBJpKZQAss8TVaayZnEXMggi",
     "new_password_set": true
   },
   {
@@ -32,7 +32,7 @@
     "username": "tvolunteer",
     "role": "Volunteer",
     "email": "m257050@usna.edu",
-    "password": "$2a$10$c6jsaWlPvVrWDcXcNSG1N.5.RypQYbafoqV.NL3/tTyiJiGAW/H5y",
+    "password": "$2a$10$JZZMiZfTepJi9oLaj1Dw7.G8vsLc1hgIsmov1vrNa6H58Is2kJfjq",
     "new_password_set": true
   }
 ]
